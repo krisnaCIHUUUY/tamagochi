@@ -1,0 +1,134 @@
+/* TamaFlutter — generated from tokens.json */
+:root, [data-theme="siang"] {
+  --surface: #f5f7fc; /* Latar aplikasi di luar ruang pet: area meter, dock aksi, layar pengaturan. */
+  --surface-raised: #ffffff; /* Isi ActionButton, StatusMeter, StageBadge, VacationNote, dan sheet. Selalu dipasangkan dengan garis `stroke`. */
+  --room: #ddebff; /* Latar ruang pet (panggung tempat pet berdiri) dan EvolutionReveal. Siang = langit pagi, Malam = langit malam. */
+  --ink: #1f2340; /* Semua teks dan ikon UI di atas `surface`, `surface-raised`, dan `room`. Minimal 12.6:1 di kedua tema. */
+  --ink-muted: #555c7d; /* Teks pendukung (umur, keterangan, huruf z saat tidur) di atas `surface`, `surface-raised`, dan `room`. Minimal 5.4:1 di kedua tema. */
+  --outline: #d3d9ea; /* Pemisah dan garis dekoratif yang tidak membawa makna. Jangan dipakai sebagai batas kontrol; itu tugas `stroke`. */
+  --stroke: #1f2340; /* Garis tebal ala stiker di sekeliling setiap kontrol dan kartu. Minimal 6:1 terhadap `surface`, `surface-raised`, dan `room` di kedua tema, jadi batas kontrol tidak pernah bergantung pada warna isi. */
+  --yolk: #ffc83d; /* Warna kuning telur, identitas TamaFlutter. Isi tombol utama (Button primary), chip ikon Lampu, dan tubuh karakter Si Seimbang. Selalu bergaris `stroke`, karena di Siang kontrasnya rendah terhadap latar. */
+  --on-yolk: #3b2a00; /* Teks dan ikon di atas `yolk`. 8.9:1 (Siang), 10.9:1 (Malam). */
+  --accent: #2258d6; /* Tautan teks, switch dan pilihan aktif di layar pengaturan. Teks `accent` aman di atas `surface` dan `surface-raised` (minimal 5.7:1). */
+  --on-accent: #ffffff; /* Teks dan ikon di atas isi `accent`. */
+  --focus-ring: var(--accent); /* Cincin fokus keyboard dan TalkBack: 3px solid, jarak 3px. Minimal 5:1 terhadap `surface`, `surface-raised`, dan `room` di kedua tema. */
+  --meter-hunger: #c86400; /* Isi meter Kenyang dan chip ikon Makan. 3.3:1 terhadap `meter-track` (Siang). Meter selalu diberi ikon dan label, jadi tidak dibedakan dari `meter-happy` lewat warna saja. */
+  --meter-happy: #d13f78; /* Isi meter Senang dan chip ikon Main. 3.7:1 terhadap `meter-track` (Siang). */
+  --meter-track: #e6eaf4; /* Bagian kosong pada pip meter. */
+  --attention: #e0353c; /* Hanya titik panggilan (attention dot) saat pet butuh sesuatu, versi ramah dari ikon panggilan Tamagotchi asli. Bukan untuk error, bukan untuk teks. */
+  --sick: #4e8a22; /* Chip ikon Obat, pipi pet saat sakit, dan ikon status sakit. Hijau pucat dipakai, bukan merah, supaya sakit tidak terasa menakutkan. */
+  --pet-ink: #1f2340; /* Garis luar, mata, dan mulut pet, serta ikon di dalam chip berwarna. Sama di kedua tema karena selalu di atas tubuh pet atau chip yang terang (minimal 3.4:1). */
+  --pet-highlight: #ffffff; /* Kilau kecil di mata pet. */
+  --pet-cheek: #ff8fa3; /* Pipi merona pet saat senang atau biasa. */
+  --pet-egg: #fff1c9; /* Cangkang telur pada tahap Telur. */
+  --char-seimbang: var(--yolk); /* Tubuh Si Seimbang, juga Bayi, Anak, dan Remaja sebelum evolusi. */
+  --char-atletis: #5ccb91; /* Tubuh Si Atletis (sering diajak main). */
+  --char-gembul: #ffb36b; /* Tubuh Si Gembul (sering diberi camilan) dan chip ikon Camilan. */
+  --char-rapi: #86c8fa; /* Tubuh Si Rapi (kandang selalu bersih), chip ikon Bersihkan, dan tetes air mata atau keringat pet. */
+  --char-mandiri: #b9a3f2; /* Tubuh Si Mandiri (sering ditinggal). */
+  --shadow-lip: 0 4px 0 #1f2340; /* Bibir keras di bawah tombol, seperti tombol mainan plastik. Hanya untuk yang bisa ditekan. */
+  --shadow-lip-pressed: 0 1px 0 #1f2340; /* Saat ditekan: tombol turun 3px dan bibirnya menipis. */
+  --shadow-float: 0 8px 24px rgba(31, 35, 64, 0.14); /* Satu-satunya bayangan lembut: VacationNote dan sheet yang melayang di atas ruang pet. */
+}
+[data-theme="malam"] {
+  --surface: #12152b;
+  --surface-raised: #1c2142;
+  --room: #1e2550;
+  --ink: #eef1ff;
+  --ink-muted: #a9b0d6;
+  --outline: #30386a;
+  --stroke: #9aa3d4;
+  --yolk: #ffd35c;
+  --on-yolk: #2e2200;
+  --accent: #86aaff;
+  --on-accent: #0e1433;
+  --focus-ring: var(--accent);
+  --meter-hunger: #ffa552;
+  --meter-happy: #ff86b0;
+  --meter-track: #2c335f;
+  --attention: #ff6b6e;
+  --sick: #8ccb5c;
+  --char-seimbang: var(--yolk);
+  --shadow-lip: 0 4px 0 #070914;
+  --shadow-lip-pressed: 0 1px 0 #070914;
+  --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+:root {
+  --space-1: 4px; /* Jarak ikon ke label di dalam ActionButton. */
+  --space-2: 8px; /* Celah antar-ActionButton dan antar-pip meter yang berdekatan. */
+  --space-3: 12px; /* Padding dalam chip dan StageBadge. */
+  --space-4: 16px; /* Gutter layar dan padding kartu. */
+  --space-6: 24px; /* Jarak antar-kelompok: ruang pet, meter, dock aksi. */
+  --space-8: 32px; /* Padding EvolutionReveal dan margin atas judul layar. */
+  --radius-sm: 8px; /* Pip meter dan chip kecil. */
+  --radius-md: 16px; /* ActionButton dan VacationNote. */
+  --radius-lg: 24px; /* Ruang pet, dock aksi, sheet. */
+  --radius-full: 9999px; /* Button, StageBadge, chip ikon bundar. */
+  --size-touch-min: 48px; /* Target sentuh minimum apa pun (P0-3). Ikon tombol pengaturan pun 48 x 48. */
+  --size-action: 72px; /* Tinggi ActionButton. Lebih besar dari minimum karena pemainnya anak-anak. */
+  --size-button: 56px; /* Tinggi Button utama dan sekunder. */
+  --size-pip: 16px; /* Tinggi pip meter. */
+  --size-pet: 200px; /* Lebar kotak gambar pet dewasa di layar 360dp. Tahap lain diskalakan dari sini (lihat Pet). */
+  --border-sticker: 2px; /* Tebal garis `stroke` pada semua kontrol dan kartu. */
+  --border-pet: 3px; /* Tebal garis luar pet (`pet-ink`), sedikit lebih tebal agar pet tetap jadi tokoh utama. */
+  --dur-press: 90ms; /* Tombol turun saat ditekan. */
+  --dur-blink: 120ms; /* Satu kedipan mata pet. Jeda antar-kedipan 3-5 detik dari Random ber-seed. */
+  --dur-react: 360ms; /* Reaksi aksi: lompat saat makan atau main, berputar saat dibersihkan. */
+  --dur-shake: 420ms; /* Geleng kepala saat aksi ditolak: tiga ayunan. */
+  --dur-meter: 400ms; /* Pip meter terisi atau berkurang. */
+  --dur-reveal: 1200ms; /* Urutan EvolutionReveal: kilau, siluet, karakter baru. */
+  --dur-breathe: 2400ms; /* Satu siklus napas pet saat diam (skala 1.00 ke 1.03 dan kembali). */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1); /* Perpindahan UI biasa: meter, sheet. Flutter: Curves.easeOutCubic sudah cukup dekat. */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); /* Reaksi pet dan tombol lepas tekan. Flutter: Curves.easeOutBack. */
+  --ease-breathe: cubic-bezier(0.37, 0, 0.63, 1); /* Napas pet, bolak-balik tanpa henti. Flutter: Curves.easeInOutSine. */
+  --font-display: "Fredoka", "Baloo 2", system-ui, sans-serif;
+  --font-body: "Lexend", system-ui, sans-serif;
+  --text-tm-display: 600 34px/38px var(--font-display); /* Satu kali per layar: nama karakter di EvolutionReveal. */
+  --text-tm-title: 600 24px/30px var(--font-display); /* Judul kartu dan sheet: VacationNote, judul layar Pengaturan. */
+  --text-tm-numeral: 600 20px/24px var(--font-display); /* Angka yang boleh dilihat anak: umur pet, jam tidur. */
+  --text-tm-body: 400 18px/28px var(--font-body); /* Kalimat yang dibaca anak. Maksimal dua kalimat per blok. */
+  --text-tm-label: 600 15px/20px var(--font-body); /* Label tombol, label meter, isi StageBadge. */
+  --text-tm-caption: 400 14px/20px var(--font-body); /* Keterangan kecil dalam `ink-muted`. Ukuran terkecil di aplikasi; tidak ada teks di bawah 14px. */
+}
+.tm-display {
+  font-family: var(--font-display);
+  font-size: 34px;
+  line-height: 38px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.tm-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.tm-numeral {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.tm-body {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.tm-label {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.tm-caption {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+}

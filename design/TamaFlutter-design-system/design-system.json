@@ -1,0 +1,127 @@
+{
+  "v": 3,
+  "assetGroups": {
+    "Egg~20~2b~20Pet~20Character": {
+      "files": {
+        "karakter_si_atletis.png": {
+          "blob": "ce605011e510fe2de2fb2e573437c66e",
+          "name": "karakter_si_atletis.png",
+          "sha256": "b2a5c935fada6baa44fa5414aee698dbf39e403bd4e8a9ee1557e3b9a2126a69",
+          "size": 107391,
+          "type": "image/png"
+        },
+        "karakter_si_gembul.png": {
+          "blob": "0b353f7f4ae6364ed603771bb01d59d6",
+          "name": "karakter_si_gembul.png",
+          "sha256": "8258b68ea958a1dcd0dba0e39264804b7f330e0a6ba384351256db82d064d5d1",
+          "size": 98801,
+          "type": "image/png"
+        },
+        "karakter_si_mandiri.png": {
+          "blob": "f409d07b0ac2fa6d92605ab076089224",
+          "name": "karakter_si_mandiri.png",
+          "sha256": "6d12330f175517fa93fcead91f1e090eb219ce5e26c38aeb00c7519fe452e025",
+          "size": 102366,
+          "type": "image/png"
+        },
+        "karakter_si_rapi.png": {
+          "blob": "7725c5753bdcc1a785d7f1dea410b977",
+          "name": "karakter_si_rapi.png",
+          "sha256": "4ac9ed4fdbf010869fa4c2301e722fb102859342dc54b50c8475b993a151b01f",
+          "size": 97198,
+          "type": "image/png"
+        },
+        "karakter_si_seimbang.png": {
+          "blob": "2351ca1c7708809579c796b141ca3cc7",
+          "name": "karakter_si_seimbang.png",
+          "sha256": "f32237800f5354da6078ef020b63d16173916283743be3a43ff2128b3cbb894a",
+          "size": 98825,
+          "type": "image/png"
+        },
+        "karakter_telur.png": {
+          "blob": "c8f816739617ffb8a6f16158f0eb5a0b",
+          "name": "karakter_telur.png",
+          "sha256": "cc4f8d66456b855634ebd17d23a4d1105dd9600793c444517aaa28e14b6947b4",
+          "size": 105899,
+          "type": "image/png"
+        }
+      },
+      "name": "Egg + Pet Character",
+      "order": []
+    },
+    "Pet~20Mood": {
+      "files": {
+        "ekspresi_biasa.png": {
+          "blob": "2dd1ce1eff82b22524b398e08396cd89",
+          "name": "ekspresi_biasa.png",
+          "sha256": "87cf3a55e58555e49c75f6a45f37177a65eb7b19a2a5a75a0e290960ea1c8dd9",
+          "size": 97412,
+          "type": "image/png"
+        },
+        "ekspresi_lapar.png": {
+          "blob": "6e5fe9653270da7da1a14bc43da3ce20",
+          "name": "ekspresi_lapar.png",
+          "sha256": "788d1a4aff240a2c1153c8546413748406e3c2228f2ed5ecb7ecb73256012c85",
+          "size": 98234,
+          "type": "image/png"
+        },
+        "ekspresi_murung.png": {
+          "blob": "812f3c170046dc3ac6af95029c4f7736",
+          "name": "ekspresi_murung.png",
+          "sha256": "124072c0159cf56b1fc428a8cc61fb83af71850b5df968006cc2fa611867dca9",
+          "size": 97217,
+          "type": "image/png"
+        },
+        "ekspresi_sakit.png": {
+          "blob": "bfce50d5de0e48a8b4a494123c2379e4",
+          "name": "ekspresi_sakit.png",
+          "sha256": "1fc1c69b1ad860002c070b56483381fd878f346c923084849fc8b6eb31fd155e",
+          "size": 96518,
+          "type": "image/png"
+        },
+        "ekspresi_senang.png": {
+          "blob": "dfd35db5254125b0956266e0f157e52f",
+          "name": "ekspresi_senang.png",
+          "sha256": "03e530154cb6a3f70abee463d6f868bae8bd34cdb53c8f9b57c289b80c71852d",
+          "size": 94682,
+          "type": "image/png"
+        },
+        "ekspresi_tidur.png": {
+          "blob": "c86edfe73bb3739a8ba1d76ceab42800",
+          "name": "ekspresi_tidur.png",
+          "sha256": "e752e3d790fa92d0e33c3b2c43b6f923832a6a894d8b240864dd7f2eb920a300",
+          "size": 95027,
+          "type": "image/png"
+        }
+      },
+      "name": "Pet Mood",
+      "order": []
+    }
+  },
+  "blobs": {},
+  "createdOnFiles": {
+    "at": "2026-11-05T15:40:00Z",
+    "v": 1
+  },
+  "docs": {
+    "readme": "project/README.md",
+    "sections": [
+      "project/prd.md"
+    ]
+  },
+  "groups": [
+    "Pet~20Mood",
+    "Egg~20~2b~20Pet~20Character"
+  ],
+  "lastChange": {
+    "at": "2026-11-05T15:50:00Z",
+    "by": "Claude",
+    "note": "Pratinjau Pet, PetScreen, EvolutionReveal jadi SVG statis; grup Pet diganti Karakter.",
+    "via": "Claude (cloud session)"
+  },
+  "layout": "files",
+  "libraries": [],
+  "namespace": "TamaFlutter",
+  "sections": {},
+  "title": "TamaFlutter"
+}

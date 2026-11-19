@@ -1,0 +1,252 @@
+{
+  "manifestVersion": 3,
+  "name": "TamaFlutter",
+  "namespace": "TamaFlutter",
+  "files": [
+    "components/ActionBar/README.md",
+    "components/ActionButton/README.md",
+    "components/Button/README.md",
+    "components/EvolutionReveal/README.md",
+    "components/Pet/README.md",
+    "components/PetScreen/README.md",
+    "components/StageBadge/README.md",
+    "components/StatusMeter/README.md",
+    "components/VacationNote/README.md",
+    "components/bundle.css",
+    "prd.md",
+    "tokens.css"
+  ],
+  "libraries": [],
+  "components": [
+    {
+      "name": "ActionBar",
+      "group": "Aksi",
+      "summary": "Dock 3 x 2 berisi enam ActionButton di bagian bawah PetScreen, selalu dalam urutan yang sama."
+    },
+    {
+      "name": "ActionButton",
+      "group": "Aksi",
+      "summary": "Satu dari enam aksi rawat (Makan, Camilan, Main, Bersihkan, Obat, Lampu), digambar sebagai tombol mainan yang turun saat ditekan."
+    },
+    {
+      "name": "Button",
+      "group": "Aksi",
+      "summary": "Tombol berlabel untuk keputusan di luar aksi rawat: Jemput Tama, Lihat Tama, Nanti saja."
+    },
+    {
+      "name": "EvolutionReveal",
+      "group": "Momen",
+      "summary": "Momen kejutan satu layar saat app dibuka dan pet ternyata sudah berevolusi selama app tertutup (P0-5)."
+    },
+    {
+      "name": "Pet",
+      "group": "Karakter",
+      "summary": "Gambar pet yang dilukis PetPainter (CustomPainter) dari bentuk geometri saja: tubuh persegi bulat, dua kaki oval, mata, mulut, dan pipi."
+    },
+    {
+      "name": "PetScreen",
+      "group": "Layar",
+      "summary": "Satu-satunya layar utama: StageBadge dan tombol pengaturan di atas, ruang pet di tengah, dua StatusMeter, lalu ActionBar di bawah."
+    },
+    {
+      "name": "StageBadge",
+      "group": "Status",
+      "summary": "Pil kecil di kiri atas PetScreen yang menunjukkan tahap hidup dan umur pet, atau jam bangun saat pet tidur."
+    },
+    {
+      "name": "StatusMeter",
+      "group": "Status",
+      "summary": "Meter Kenyang atau Senang dalam lima pip, seperti hati pada Tamagotchi asli, sehingga anak bisa membacanya tanpa angka."
+    },
+    {
+      "name": "VacationNote",
+      "group": "Momen",
+      "summary": "Catatan bertempel selotip yang menggantikan pet setelah 48 jam tanpa perawatan: pet pergi berlibur ke rumah nenek, bukan mati."
+    }
+  ],
+  "assetGroups": [
+    {
+      "name": "Pet Mood",
+      "files": [
+        {
+          "path": "assets/Pet Mood/ekspresi_biasa.png",
+          "id": "2dd1ce1eff82b22524b398e08396cd89"
+        },
+        {
+          "path": "assets/Pet Mood/ekspresi_lapar.png",
+          "id": "6e5fe9653270da7da1a14bc43da3ce20"
+        },
+        {
+          "path": "assets/Pet Mood/ekspresi_murung.png",
+          "id": "812f3c170046dc3ac6af95029c4f7736"
+        },
+        {
+          "path": "assets/Pet Mood/ekspresi_sakit.png",
+          "id": "bfce50d5de0e48a8b4a494123c2379e4"
+        },
+        {
+          "path": "assets/Pet Mood/ekspresi_senang.png",
+          "id": "dfd35db5254125b0956266e0f157e52f"
+        },
+        {
+          "path": "assets/Pet Mood/ekspresi_tidur.png",
+          "id": "c86edfe73bb3739a8ba1d76ceab42800"
+        }
+      ]
+    },
+    {
+      "name": "Egg + Pet Character",
+      "files": [
+        {
+          "path": "assets/Egg + Pet Character/karakter_si_atletis.png",
+          "id": "ce605011e510fe2de2fb2e573437c66e"
+        },
+        {
+          "path": "assets/Egg + Pet Character/karakter_si_gembul.png",
+          "id": "0b353f7f4ae6364ed603771bb01d59d6"
+        },
+        {
+          "path": "assets/Egg + Pet Character/karakter_si_mandiri.png",
+          "id": "f409d07b0ac2fa6d92605ab076089224"
+        },
+        {
+          "path": "assets/Egg + Pet Character/karakter_si_rapi.png",
+          "id": "7725c5753bdcc1a785d7f1dea410b977"
+        },
+        {
+          "path": "assets/Egg + Pet Character/karakter_si_seimbang.png",
+          "id": "2351ca1c7708809579c796b141ca3cc7"
+        },
+        {
+          "path": "assets/Egg + Pet Character/karakter_telur.png",
+          "id": "c8f816739617ffb8a6f16158f0eb5a0b"
+        }
+      ]
+    }
+  ],
+  "storage": {
+    "files": {
+      "assets/Egg + Pet Character/karakter_si_atletis.png": {
+        "store": "blob",
+        "id": "ce605011e510fe2de2fb2e573437c66e",
+        "sha256": "b2a5c935fada6baa44fa5414aee698dbf39e403bd4e8a9ee1557e3b9a2126a69",
+        "bytes": 107391,
+        "type": "image/png",
+        "name": "karakter_si_atletis.png",
+        "addedAt": "2026-11-05T16:23:02.984Z",
+        "via": "page"
+      },
+      "assets/Egg + Pet Character/karakter_si_gembul.png": {
+        "store": "blob",
+        "id": "0b353f7f4ae6364ed603771bb01d59d6",
+        "sha256": "8258b68ea958a1dcd0dba0e39264804b7f330e0a6ba384351256db82d064d5d1",
+        "bytes": 98801,
+        "type": "image/png",
+        "name": "karakter_si_gembul.png",
+        "addedAt": "2026-11-05T16:23:04.102Z",
+        "via": "page"
+      },
+      "assets/Egg + Pet Character/karakter_si_mandiri.png": {
+        "store": "blob",
+        "id": "f409d07b0ac2fa6d92605ab076089224",
+        "sha256": "6d12330f175517fa93fcead91f1e090eb219ce5e26c38aeb00c7519fe452e025",
+        "bytes": 102366,
+        "type": "image/png",
+        "name": "karakter_si_mandiri.png",
+        "addedAt": "2026-11-05T16:23:05.082Z",
+        "via": "page"
+      },
+      "assets/Egg + Pet Character/karakter_si_rapi.png": {
+        "store": "blob",
+        "id": "7725c5753bdcc1a785d7f1dea410b977",
+        "sha256": "4ac9ed4fdbf010869fa4c2301e722fb102859342dc54b50c8475b993a151b01f",
+        "bytes": 97198,
+        "type": "image/png",
+        "name": "karakter_si_rapi.png",
+        "addedAt": "2026-11-05T16:23:06.381Z",
+        "via": "page"
+      },
+      "assets/Egg + Pet Character/karakter_si_seimbang.png": {
+        "store": "blob",
+        "id": "2351ca1c7708809579c796b141ca3cc7",
+        "sha256": "f32237800f5354da6078ef020b63d16173916283743be3a43ff2128b3cbb894a",
+        "bytes": 98825,
+        "type": "image/png",
+        "name": "karakter_si_seimbang.png",
+        "addedAt": "2026-11-05T16:23:07.303Z",
+        "via": "page"
+      },
+      "assets/Egg + Pet Character/karakter_telur.png": {
+        "store": "blob",
+        "id": "c8f816739617ffb8a6f16158f0eb5a0b",
+        "sha256": "cc4f8d66456b855634ebd17d23a4d1105dd9600793c444517aaa28e14b6947b4",
+        "bytes": 105899,
+        "type": "image/png",
+        "name": "karakter_telur.png",
+        "addedAt": "2026-11-05T16:23:08.361Z",
+        "via": "page"
+      },
+      "assets/Pet Mood/ekspresi_biasa.png": {
+        "store": "blob",
+        "id": "2dd1ce1eff82b22524b398e08396cd89",
+        "sha256": "87cf3a55e58555e49c75f6a45f37177a65eb7b19a2a5a75a0e290960ea1c8dd9",
+        "bytes": 97412,
+        "type": "image/png",
+        "name": "ekspresi_biasa.png",
+        "addedAt": "2026-11-05T16:22:15.515Z",
+        "via": "page"
+      },
+      "assets/Pet Mood/ekspresi_lapar.png": {
+        "store": "blob",
+        "id": "6e5fe9653270da7da1a14bc43da3ce20",
+        "sha256": "788d1a4aff240a2c1153c8546413748406e3c2228f2ed5ecb7ecb73256012c85",
+        "bytes": 98234,
+        "type": "image/png",
+        "name": "ekspresi_lapar.png",
+        "addedAt": "2026-11-05T16:22:16.604Z",
+        "via": "page"
+      },
+      "assets/Pet Mood/ekspresi_murung.png": {
+        "store": "blob",
+        "id": "812f3c170046dc3ac6af95029c4f7736",
+        "sha256": "124072c0159cf56b1fc428a8cc61fb83af71850b5df968006cc2fa611867dca9",
+        "bytes": 97217,
+        "type": "image/png",
+        "name": "ekspresi_murung.png",
+        "addedAt": "2026-11-05T16:22:17.652Z",
+        "via": "page"
+      },
+      "assets/Pet Mood/ekspresi_sakit.png": {
+        "store": "blob",
+        "id": "bfce50d5de0e48a8b4a494123c2379e4",
+        "sha256": "1fc1c69b1ad860002c070b56483381fd878f346c923084849fc8b6eb31fd155e",
+        "bytes": 96518,
+        "type": "image/png",
+        "name": "ekspresi_sakit.png",
+        "addedAt": "2026-11-05T16:22:18.578Z",
+        "via": "page"
+      },
+      "assets/Pet Mood/ekspresi_senang.png": {
+        "store": "blob",
+        "id": "dfd35db5254125b0956266e0f157e52f",
+        "sha256": "03e530154cb6a3f70abee463d6f868bae8bd34cdb53c8f9b57c289b80c71852d",
+        "bytes": 94682,
+        "type": "image/png",
+        "name": "ekspresi_senang.png",
+        "addedAt": "2026-11-05T16:22:19.515Z",
+        "via": "page"
+      },
+      "assets/Pet Mood/ekspresi_tidur.png": {
+        "store": "blob",
+        "id": "c86edfe73bb3739a8ba1d76ceab42800",
+        "sha256": "e752e3d790fa92d0e33c3b2c43b6f923832a6a894d8b240864dd7f2eb920a300",
+        "bytes": 95027,
+        "type": "image/png",
+        "name": "ekspresi_tidur.png",
+        "addedAt": "2026-11-05T16:22:20.552Z",
+        "via": "page"
+      }
+    },
+    "blobBytesUsed": 1189570
+  }
+}

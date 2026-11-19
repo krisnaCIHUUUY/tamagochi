@@ -1,0 +1,43 @@
+<!doctype html>
+<html data-theme="siang">
+<head><link rel="stylesheet" href="../tokens.css"><link rel="stylesheet" href="../components/bundle.css"><meta charset="utf-8"><title>TamaFlutter cover</title>
+<style>
+  html, body { margin: 0; background: var(--surface); }
+  .cv { position: relative; width: 960px; height: 288px; overflow: hidden; background: var(--surface); }
+  .cv svg { position: absolute; inset: 0; }
+  .sky { fill: var(--accent); }
+  .yolk { fill: var(--yolk); }
+  .happy { fill: var(--meter-happy); }
+  .hunger { fill: var(--meter-hunger); }
+  .cut { fill: var(--surface); }
+  .txt { position: absolute; left: 48px; bottom: 36px; width: 440px; }
+  .name { margin: 0; font: 600 64px/0.95 var(--font-display); color: var(--ink); letter-spacing: -0.01em; }
+  .tag { margin: 12px 0 0; font: 400 14px/20px var(--font-body); color: var(--ink-muted); }
+</style>
+</head>
+<body>
+<div class="cv">
+  <svg width="960" height="288" viewBox="0 0 960 288" aria-hidden="true">
+    <!--
+      blocks: accent slab 384x232 (rx radius-lg 24), yolk disc d160 (space-8 x 5), meter-happy pill 232x32, meter-hunger pill 48x112
+      arrangement: one tall sky slab bleeding off the top-right, the yolk disc rising over its lower-left corner like a sun or an egg yolk, two meter pills as satellites
+      pattern: soft, friendly, large radii row; the README's five-pip StatusMeter drawn as five pills on the slab, three filled with yolk, two cut out in the ground
+      scales: pip 24x56 at pitch 40 (space-4 gap 16), radius-lg 24, radius-full on pills and disc
+    -->
+    <rect class="sky" x="600" y="-24" width="384" height="232" rx="24"/>
+    <rect class="hunger" x="512" y="40" width="48" height="112" rx="24"/>
+    <circle class="yolk" cx="640" cy="200" r="80"/>
+    <rect class="happy" x="752" y="240" width="232" height="32" rx="16"/>
+    <rect class="yolk" x="752" y="48" width="24" height="56" rx="12"/>
+    <rect class="yolk" x="792" y="48" width="24" height="56" rx="12"/>
+    <rect class="yolk" x="832" y="48" width="24" height="56" rx="12"/>
+    <rect class="cut" x="872" y="48" width="24" height="56" rx="12"/>
+    <rect class="cut" x="912" y="48" width="24" height="56" rx="12"/>
+  </svg>
+  <div class="txt">
+    <h1 class="name">TamaFlutter</h1>
+    <p class="tag">Peliharaan virtual yang ramah untuk anak dan remaja.</p>
+  </div>
+</div>
+</body>
+</html>
