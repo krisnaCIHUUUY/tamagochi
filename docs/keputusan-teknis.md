@@ -15,6 +15,7 @@ Rencana bilang "unduh TTF Fredoka + Lexend ke `assets/fonts/`", tapi tidak menye
 - Font OFL wajib menyertakan `OFL.txt`, dan dokumentasi menyarankan mendaftarkannya lewat `LicenseRegistry` di `main()`.
 
 Pilihan:
+
 - **A.** 3 file statis (`Fredoka-SemiBold.ttf`, `Lexend-Regular.ttf`, `Lexend-SemiBold.ttf`) dari folder `static/` hasil unduhan resmi fonts.google.com, + `OFL.txt` + registrasi `LicenseRegistry`.
 - **B.** File variable font (satu file per keluarga) dari repo `github.com/google/fonts`. Belum terverifikasi apakah `google_fonts` mengenali nama file variable.
 
