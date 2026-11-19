@@ -8,7 +8,9 @@ void main() {
   // Lisensi OFL wajib ikut saat font dibundel.
   LicenseRegistry.addLicense(() async* {
     for (final family in ['Fredoka', 'Lexend']) {
-      final license = await rootBundle.loadString('assets/fonts/$family-OFL.txt');
+      final license = await rootBundle.loadString(
+        'assets/fonts/$family-OFL.txt',
+      );
       yield LicenseEntryWithLineBreaks([family], license);
     }
   });

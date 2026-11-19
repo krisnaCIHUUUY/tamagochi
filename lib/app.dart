@@ -5,9 +5,6 @@ class TamaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'TamaFlutter',
-      home: Scaffold(),
-    );
+    return const MaterialApp(title: 'TamaFlutter', home: Scaffold());
   }
 }

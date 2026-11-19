@@ -26,3 +26,11 @@ Pilihan:
 ## Catatan Task 1
 
 - Repo git ternyata sudah ada (branch `develop`, commit `fe031d4`, remote `origin`). `git init` di rencana tidak diperlukan dan tidak mengubah apa pun.
+
+## D3 — Letak file enum (Task 3) · Diputuskan: file terpisah
+
+Rencana menggabungkan enum ke `entities/enums.dart`, sedangkan `CLAUDE.md` menulis satu file per enum. **Hasil:** ikut `CLAUDE.md`, yaitu `life_stage.dart`, `mood.dart`, `care_action.dart`, dan `pet_character.dart` di `features/pet/domain/entities/`. Task berikutnya mengimpor dari file-file ini, bukan dari `enums.dart`.
+
+## D4 — Nilai awal `GameRules` (Task 3) · Diputuskan: pakai usulan K1–K12
+
+Semua usulan K1–K12 di tabel "Keputusan aturan" pada rencana dipakai apa adanya sebagai konstanta `GameRules`. Semua angka akan disetel ulang lewat playtest.
