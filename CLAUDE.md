@@ -12,10 +12,13 @@ Baca file ini sebelum mengerjakan apa pun.
 
 | Dokumen | Isi | Kapan dibaca |
 | --- | --- | --- |
-| `docs/PRD.md` | Aturan game, requirement P0/P1/P2, ADR, fase | Sebelum fitur apa pun |
-| `docs/design-system/README.md` | Prinsip UI, warna, tipografi, gerak, ikon, suara teks | Sebelum pekerjaan UI apa pun |
-| `docs/design-system/tokens.json` | Semua nilai token (warna Siang/Malam, spacing, radius, durasi, easing) | Saat menulis atau mengubah tema |
-| `docs/design-system/components/<Comp>/README.md` | Panduan per komponen | Sebelum membangun komponen itu |
+| `docs/PRD Tamagotchi Flutter.md` | Aturan game, requirement P0/P1/P2, ADR, fase | Sebelum fitur apa pun |
+| `design/TamaFlutter-design-system/` | Prinsip UI, warna, tipografi, gerak, ikon, suara teks | Sebelum pekerjaan UI apa pun |
+| `design/TamaFlutter-design-system/tokens.json` | Semua nilai token (warna Siang/Malam, spacing, radius, durasi, easing) | Saat menulis atau mengubah tema |
+| `design/TamaFlutter-design-system/components/<Comp>/README.md` | Panduan per komponen | Sebelum membangun komponen itu |
+| `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` | Rencana implementasi 29 task (urutan, interface, test) | Sebelum mengerjakan task berikutnya |
+| `docs/progress.md` | Status per task + ringkasan yang sudah dikerjakan | Di awal setiap sesi; perbarui setelah task selesai |
+| `docs/keputusan-teknis.md` | Keputusan teknis di luar rencana (D1, D2, ...) | Sebelum mengambil keputusan baru; catat keputusan baru di sini |
 
 Kalau file ini bertentangan dengan PRD, **PRD yang menang**. Kalau keduanya diam soal suatu hal, tanya.
 
@@ -25,6 +28,7 @@ Kalau file ini bertentangan dengan PRD, **PRD yang menang**. Kalau keduanya diam
 
 Perbarui bagian ini setiap kali gerbang fase lolos.
 
+- **Fondasi (Task 1 rencana):** selesai di `0ec5f48` (dependensi, `TamaApp` minimal, font dibundel).
 - **Fase sekarang:** Fase 1, Simulasi (belum dimulai)
 - **Fase berikutnya:** Fase 2, Dirawat
 
@@ -61,7 +65,7 @@ Jangan mengerjakan hal dari fase berikutnya sebelum gerbang fase sekarang lolos,
 | Waktu | `abstract class Clock` sendiri, diinjeksi lewat get_it (ADR-2) |
 | Ticker | `Stream.periodic` di dalam `PetBloc` (ADR-3) |
 | Animasi | Widget Flutter murni: implicit animation, `AnimationController`, `CustomPainter` |
-| Font | google_fonts (Fredoka + Lexend) |
+| Font | google_fonts ^9.0.0 (Fredoka + Lexend), **dibundel** di `assets/fonts/` (D1) |
 | Ikon | `Icons.*_rounded` bawaan Flutter |
 | Test | flutter_test, bloc_test, mocktail, fake_async |
 | P1 | flutter_local_notifications, timezone, flutter_timezone, vibration |
@@ -111,7 +115,7 @@ Jangan memutuskan hal-hal ini diam-diam. Kalau pekerjaanmu bergantung padanya, t
 
 - Batas catch-up "tidak di bawah 10": sudah tepat, atau pet yang lama ditinggal perlu tampak lebih sedih? (blocking Fase 1)
 - Simulasi per menit atau per kejadian berikutnya? Usulan PRD: per menit dulu, ganti bila benchmark gagal. (blocking Fase 1)
-- Pet digambar `CustomPainter` (rencana PRD v1) atau memakai PNG di `assets/images/pet/` (P2-1)?
+- Pet digambar `CustomPainter` (rencana PRD v1) atau memakai PNG di `design/karakter_virtual_pet_terpisah/` (P2-1)?
 - Telur menetas 5 menit: terlalu lama untuk anak?
 - Laju kenyang −8/jam: terlalu cepat untuk anak yang sekolah 7 jam?
 
@@ -273,7 +277,7 @@ dart run build_runner build --delete-conflicting-outputs
 
 ## UI implementation rules (SANGAT PENTING)
 
-Semua UI mengikuti **design system TamaFlutter** di `docs/design-system/`.
+Semua UI mengikuti **design system TamaFlutter** di `design/TamaFlutter-design-system/`.
 
 Kalau pengembang memberi gambar desain:
 
@@ -311,9 +315,10 @@ Semua nilai visual berasal dari token. **Jangan pernah menulis warna hex, ukuran
 | `tm-display` … `tm-caption` | `AppTextStyle` (`GoogleFonts.fredoka()` untuk display, `GoogleFonts.lexend()` untuk teks) |
 | `dur-*`, `ease-*` | `AppMotion` (`Duration` + `Curve`) |
 
+- **Font dibundel, tidak pernah diunduh.** File di `assets/fonts/` memakai nama asli Google Fonts (`Fredoka-SemiBold.ttf`, `Lexend-Regular.ttf`, `Lexend-SemiBold.ttf`), karena `google_fonts` mencocokkan aset lewat nama itu. Token hanya memakai berat 600 (Fredoka) serta 400 dan 600 (Lexend). Berat lain berarti unduh file statisnya dan beri nama asli. Lisensi OFL (`*-OFL.txt`) didaftarkan di `main()` lewat `LicenseRegistry`. `GoogleFonts.config.allowRuntimeFetching = false` wajib (Task 20).
 - Ambil warna lewat `Theme.of(context).colorScheme` dan `Theme.of(context).extension<PetColors>()!`. Boleh membuat extension `BuildContext` agar lebih ringkas.
 - Ikuti pola file di `lib/core/theme/` Henshin: satu kelas konstanta per keluarga token, konstruktor privat.
-- Kalau sebuah nilai belum ada sebagai token, **tanya dulu** sebelum menambah token baru, lalu tambahkan juga ke `docs/design-system/tokens.json`.
+- Kalau sebuah nilai belum ada sebagai token, **tanya dulu** sebelum menambah token baru, lalu tambahkan juga ke `design/TamaFlutter-design-system/tokens.json`.
 
 ### Gaya stiker dan tombol mainan
 
@@ -358,11 +363,11 @@ Semua nilai visual berasal dari token. **Jangan pernah menulis warna hex, ukuran
 
 ## Pet rendering rules
 
-- v1 menggambar pet dengan `CustomPainter` (P0-7). Ikuti proporsi dan mood di `docs/design-system/components/Pet/README.md`.
+- v1 menggambar pet dengan `CustomPainter` (P0-7). Ikuti proporsi dan mood di `design/TamaFlutter-design-system/components/Pet/README.md`.
 - Enam mood: senang, biasa, lapar, sakit, tidur, murung. Mood dihitung oleh `resolveMood(state)` di domain, bukan di widget.
 - Bentuk: Telur, Si Seimbang (juga Bayi/Anak/Remaja), Si Atletis, Si Gembul, Si Rapi, Si Mandiri.
 - Skala tahap dari `size-pet` (200): Bayi 0.5, Anak 0.7, Remaja 0.85, Dewasa 1.0.
-- Gambar PNG di `assets/images/pet/` adalah **acuan visual** untuk painter. Menggantinya dengan PNG sebagai renderer adalah P2-1; tanya dulu sebelum melakukannya. Bila nanti dikerjakan, renderer dibuat di balik abstraksi `PetRenderer` supaya logika tidak berubah.
+- Gambar PNG di `design/karakter_virtual_pet_terpisah/` adalah **acuan visual** untuk painter dan **tidak dibundel** ke APK. Menggantinya dengan PNG sebagai renderer adalah P2-1 (filenya baru disalin ke `assets/images/pet/` saat itu); tanya dulu sebelum melakukannya. Bila nanti dikerjakan, renderer dibuat di balik abstraksi `PetRenderer` supaya logika tidak berubah.
 
 ---
 
