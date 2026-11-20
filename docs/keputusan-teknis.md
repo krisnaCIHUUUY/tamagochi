@@ -34,3 +34,11 @@ Rencana menggabungkan enum ke `entities/enums.dart`, sedangkan `CLAUDE.md` menul
 ## D4 — Nilai awal `GameRules` (Task 3) · Diputuskan: pakai usulan K1–K12
 
 Semua usulan K1–K12 di tabel "Keputusan aturan" pada rencana dipakai apa adanya sebagai konstanta `GameRules`. Semua angka akan disetel ulang lewat playtest.
+
+## D5 — Timer sakit saat tidur (Task 7) · Diputuskan: hanya berjalan saat bangun
+
+`zeroNeedFor` ("kenyang/senang 0 > 60 menit") dan `heavyPoopFor` ("≥ 3 kotoran selama 2 jam") hanya bertambah di menit bangun. Saat tidur timer **berhenti**: tidak bertambah dan tidak direset. **Alasan:** konsisten dengan "saat tidur meter tidak turun", dan anak tidak bisa merawat di malam hari.
+
+## D6 — Timer setelah jadi sakit (Task 7) · Diputuskan: reset saat jadi sakit
+
+Saat pet menjadi sakit, `zeroNeedFor` dan `heavyPoopFor` kembali ke 0 dan tidak bertambah selama sakit. **Alasan:** Makan ditolak saat sakit. Tanpa reset, pet dengan kenyang 0 langsung sakit lagi semenit setelah sembuh diberi Obat, sehingga terjebak sakit terus. Setelah sembuh, pemain punya 60 menit untuk memberi makan.

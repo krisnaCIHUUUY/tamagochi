@@ -21,6 +21,9 @@ PetState simulate(
   var firstPoopAt = state.firstPoopAt;
   var lightsOn = state.lightsOn;
   var lightsOnAllSleep = state.lightsOnAllSleep;
+  var isSick = state.isSick;
+  var zeroNeedFor = state.zeroNeedFor;
+  var heavyPoopFor = state.heavyPoopFor;
   // Keadaan sesaat sebelum `from`, agar transisi tepat di `from` ikut terdeteksi.
   var wasAsleep = state.isAsleepAt(
     from.subtract(const Duration(microseconds: 1)),
@@ -74,6 +77,24 @@ PetState simulate(
         .clamp(GameRules.minMeter, GameRules.maxMeter)
         .toDouble();
 
+    // D5: timer sakit hanya berjalan saat bangun. Saat tidur berhenti, tidak direset.
+    if (!asleep && !isSick) {
+      final zeroNeed =
+          fullness <= GameRules.minMeter || happiness <= GameRules.minMeter;
+      zeroNeedFor = zeroNeed ? zeroNeedFor + step : Duration.zero;
+      heavyPoopFor = poop >= GameRules.sickPoopThreshold
+          ? heavyPoopFor + step
+          : Duration.zero;
+
+      if (zeroNeedFor > GameRules.sickZeroNeedAfter ||
+          heavyPoopFor >= GameRules.sickPoopAfter) {
+        isSick = true;
+        // D6: reset agar pet tidak langsung sakit lagi setelah sembuh.
+        zeroNeedFor = Duration.zero;
+        heavyPoopFor = Duration.zero;
+      }
+    }
+
     t = t.add(step);
 
     if (stage == LifeStage.egg &&
@@ -94,5 +115,8 @@ PetState simulate(
     firstPoopAt: firstPoopAt,
     lightsOn: lightsOn,
     lightsOnAllSleep: lightsOnAllSleep,
+    isSick: isSick,
+    zeroNeedFor: zeroNeedFor,
+    heavyPoopFor: heavyPoopFor,
   );
 }

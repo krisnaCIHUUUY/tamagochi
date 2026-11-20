@@ -9,8 +9,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 3. Enum, GameRules, SleepSchedule, CareStyle, PetState | ✅ Selesai, diverifikasi user | `6c7607b` |
 | 1 | 4. SleepSchedule.isAsleepAt | ✅ Selesai, diverifikasi user | `ae35c53` |
 | 1 | 5. `simulate` inti | ✅ Selesai, diverifikasi user | `b80c7ca` |
-| 1 | 6. Kotoran + lampu + transisi bangun | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 7–14. Domain murni | Belum | — |
+| 1 | 6. Kotoran + lampu + transisi bangun | ✅ Selesai, diverifikasi user | `66caf1e` |
+| 1 | 7. Aturan sakit | ✅ Selesai, menunggu verifikasi user | — |
+| 1 | 8–14. Domain murni | Belum | — |
 | 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
@@ -66,3 +67,12 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - `poopDueAt` disalin (`[...state.poopDueAt]`) karena list freezed tidak bisa diubah.
 - Test `simulate_poop_lights_test.dart` (5): muncul 3 jam setelah makan, jatuh tempo saat tidur muncul saat bangun, batas 4, lampu menyala semalam −10, lampu mati tanpa penalti (RED dulu, lalu GREEN).
 - Verifikasi: `flutter test` 27/27 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 7 — Aturan sakit (2026-11-20, Mode belajar: ditulis Claude lalu dijelaskan)
+
+- Loop `simulate` mengisi `zeroNeedFor` (kenyang atau senang 0) dan `heavyPoopFor` (kotoran ≥ 3), dihitung setelah peluruhan + clamp di langkah yang sama.
+- Sakit bila `zeroNeedFor > 60 menit` (ketat, sesuai "> 60 menit") atau `heavyPoopFor >= 2 jam` ("selama 2 jam"). Sakit karena camilan menyusul di Task 9.
+- D5: timer hanya berjalan saat bangun; saat tidur berhenti tanpa reset.
+- D6: saat jadi sakit kedua timer direset ke 0 dan tidak bertambah selama sakit.
+- Test `simulate_sickness_test.dart` (8): 61 vs 59 menit kenyang 0, senang 0, 3 kotoran 2 jam, 2 kotoran 10 jam, reset timer, D5, D6 (RED 6/8 dulu, lalu GREEN).
+- Verifikasi: `flutter test` 35/35 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
