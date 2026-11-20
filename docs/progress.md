@@ -7,8 +7,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 0 | 1. Dependensi, scaffold, buang template counter | ✅ Selesai, diverifikasi user | `0ec5f48` |
 | 1 | 2. Clock + FakeClock | ✅ Selesai, diverifikasi user | `2a66921` |
 | 1 | 3. Enum, GameRules, SleepSchedule, CareStyle, PetState | ✅ Selesai, diverifikasi user | `6c7607b` |
-| 1 | 4. SleepSchedule.isAsleepAt | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 5–14. Domain murni | Belum | — |
+| 1 | 4. SleepSchedule.isAsleepAt | ✅ Selesai, diverifikasi user | `ae35c53` |
+| 1 | 5. `simulate` inti | ✅ Selesai, menunggu verifikasi user | — |
+| 1 | 6–14. Domain murni | Belum | — |
 | 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
@@ -46,3 +47,12 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - Extension `PetStateAge` diganti nama menjadi `PetStateTime` dan mendapat `isAsleepAt(now)` (tunda dari Task 3).
 - Test `sleep_schedule_test.dart`: 5 batas jadwal default, 2 batas jadwal 13→15, `isAsleepAt uses local time` (Review Focus 3), dan `PetState.isAsleepAt` (RED dulu, lalu GREEN).
 - Verifikasi: `flutter test` 14/14 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 5 — `simulate` inti (2026-11-20, Mode belajar: implementasi ditulis user)
+
+- `simulation/simulate.dart`: loop per menit (K2), langkah terakhir boleh < 1 menit sehingga `lastUpdated == to`. Variabel lokal di dalam loop, `copyWith` sekali di akhir (persiapan benchmark Task 14).
+- Aturan: jam mundur → `state` dikembalikan apa adanya; meter turun hanya saat bangun; pengali tahap (telur 0, bayi 2×, lainnya 1×); clamp 0–100; telur menetas setelah `eggDuration`, `stageStartedAt` dimajukan tepat 5 menit.
+- Parameter `offline` sudah ada di signature, baru dipakai di Task 8 (K1).
+- Test `simulate_test.dart` (8): awake 2 jam, rentang tidur penuh, jam mundur (`same`), melewati jam tidur, bayi 2×, telur menetas, langkah parsial 90 detik, clamp 0 (RED dulu, lalu GREEN).
+- Review: early-return `onVacation` dihapus (bertentangan dengan K10, dikerjakan di Task 8), stub fungsi task lain dihapus, import diganti relatif.
+- Verifikasi: `flutter test` 22/22 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
