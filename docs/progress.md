@@ -10,8 +10,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 4. SleepSchedule.isAsleepAt | ✅ Selesai, diverifikasi user | `ae35c53` |
 | 1 | 5. `simulate` inti | ✅ Selesai, diverifikasi user | `b80c7ca` |
 | 1 | 6. Kotoran + lampu + transisi bangun | ✅ Selesai, diverifikasi user | `66caf1e` |
-| 1 | 7. Aturan sakit | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 8–14. Domain murni | Belum | — |
+| 1 | 7. Aturan sakit | ✅ Selesai, diverifikasi user | `50b3a72` |
+| 1 | 8. Murung, liburan, batas offline | ✅ Selesai, menunggu verifikasi user | — |
+| 1 | 9–14. Domain murni | Belum | — |
 | 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
@@ -76,3 +77,12 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - D6: saat jadi sakit kedua timer direset ke 0 dan tidak bertambah selama sakit.
 - Test `simulate_sickness_test.dart` (8): 61 vs 59 menit kenyang 0, senang 0, 3 kotoran 2 jam, 2 kotoran 10 jam, reset timer, D5, D6 (RED 6/8 dulu, lalu GREEN).
 - Verifikasi: `flutter test` 35/35 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 8 — Murung, liburan, batas catch-up offline (2026-11-20, Mode belajar: ditulis Claude lalu dijelaskan)
+
+- Murung: `lowBothFor` bertambah saat kenyang **dan** senang ≤ 20, reset bila salah satu > 20; `isMoody` bila ≥ 6 jam. D7: hanya saat bangun.
+- Liburan: `onVacation` bila `t − lastCareAt ≥ 48 jam` (jam dinding, termasuk tidur), dicek setelah waktu maju sehingga tepat 48 jam sudah liburan.
+- K10: selama liburan seluruh blok perawatan (lampu, kotoran, peluruhan, timer sakit dan murung) dilewati; waktu, `wasAsleep`, tahap, dan menetas tetap berjalan.
+- K1: bila `offline`, batas bawah meter = `min(nilai awal, 10)`; meter yang sudah < 10 tidak dinaikkan dan tidak diturunkan. Berlaku juga untuk penalti lampu.
+- Test `simulate_moody_vacation_test.dart` (11): murung 6 jam vs 5j59m, reset timer, D7, liburan 48 jam vs 47j59m, liburan membekukan, tahap tetap maju, batas offline 3 hari, meter < 10, online bisa 0, PRD P0-6 30 hari (RED 7/11 dulu, lalu GREEN).
+- Verifikasi: `flutter test` 46/46 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.

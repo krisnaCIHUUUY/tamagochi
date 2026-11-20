@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../entities/life_stage.dart';
 import '../entities/pet_state.dart';
 import '../rules/game_rules.dart';
@@ -24,76 +26,97 @@ PetState simulate(
   var isSick = state.isSick;
   var zeroNeedFor = state.zeroNeedFor;
   var heavyPoopFor = state.heavyPoopFor;
+  var isMoody = state.isMoody;
+  var lowBothFor = state.lowBothFor;
+  var onVacation = state.onVacation;
   // Keadaan sesaat sebelum `from`, agar transisi tepat di `from` ikut terdeteksi.
   var wasAsleep = state.isAsleepAt(
     from.subtract(const Duration(microseconds: 1)),
   );
+
+  // K1: waktu offline tidak menurunkan meter di bawah 10.
+  // Meter yang sudah di bawah 10 tidak dinaikkan.
+  final fullnessFloor = offline
+      ? min(state.fullness, GameRules.offlineFloor)
+      : GameRules.minMeter;
+  final happinessFloor = offline
+      ? min(state.happiness, GameRules.offlineFloor)
+      : GameRules.minMeter;
 
   const oneMinute = Duration(minutes: 1);
 
   while (t.isBefore(to)) {
     final remaining = to.difference(t);
     final step = remaining < oneMinute ? remaining : oneMinute;
-
-    final hours = step.inMicroseconds / Duration.microsecondsPerHour;
-
-    final multiplier = switch (stage) {
-      LifeStage.egg => 0.0,
-      LifeStage.baby => GameRules.babyDecayMultiplier,
-      _ => 1.0,
-    };
-
     final asleep = state.isAsleepAt(t);
 
-    if (asleep && !wasAsleep) {
-      // Baru tertidur: catat apakah lampu menyala sejak awal tidur.
-      lightsOnAllSleep = lightsOn;
-    } else if (!asleep && wasAsleep) {
-      // Baru bangun (K12).
-      if (lightsOnAllSleep) happiness -= GameRules.lightsOnWakePenalty;
-      lightsOn = true;
-      lightsOnAllSleep = false;
+    // K10: saat liburan meter, kotoran, sakit, dan murung dibekukan.
+    // Waktu dan tahap tetap berjalan.
+    if (!onVacation) {
+      final hours = step.inMicroseconds / Duration.microsecondsPerHour;
+
+      final multiplier = switch (stage) {
+        LifeStage.egg => 0.0,
+        LifeStage.baby => GameRules.babyDecayMultiplier,
+        _ => 1.0,
+      };
+
+      if (asleep && !wasAsleep) {
+        // Baru tertidur: catat apakah lampu menyala sejak awal tidur.
+        lightsOnAllSleep = lightsOn;
+      } else if (!asleep && wasAsleep) {
+        // Baru bangun (K12).
+        if (lightsOnAllSleep) happiness -= GameRules.lightsOnWakePenalty;
+        lightsOn = true;
+        lightsOnAllSleep = false;
+      }
+
+      if (!asleep) {
+        // Kotoran yang jatuh tempo saat tidur baru muncul di menit bangun ini (K9).
+        final dueCount = poopDueAt.where((due) => !due.isAfter(t)).length;
+        if (dueCount > 0) {
+          poopDueAt.removeWhere((due) => !due.isAfter(t));
+          poop = (poop + dueCount).clamp(0, GameRules.maxPoop);
+          firstPoopAt ??= t;
+        }
+
+        fullness -= GameRules.fullnessDecayPerHour * hours * multiplier;
+        happiness -= GameRules.happinessDecayPerHour * hours * multiplier;
+      }
+
+      fullness = fullness.clamp(fullnessFloor, GameRules.maxMeter).toDouble();
+      happiness = happiness
+          .clamp(happinessFloor, GameRules.maxMeter)
+          .toDouble();
+
+      // D5: timer sakit hanya berjalan saat bangun. Saat tidur berhenti, tidak direset.
+      if (!asleep && !isSick) {
+        final zeroNeed =
+            fullness <= GameRules.minMeter || happiness <= GameRules.minMeter;
+        zeroNeedFor = zeroNeed ? zeroNeedFor + step : Duration.zero;
+        heavyPoopFor = poop >= GameRules.sickPoopThreshold
+            ? heavyPoopFor + step
+            : Duration.zero;
+
+        if (zeroNeedFor > GameRules.sickZeroNeedAfter ||
+            heavyPoopFor >= GameRules.sickPoopAfter) {
+          isSick = true;
+          // D6: reset agar pet tidak langsung sakit lagi setelah sembuh.
+          zeroNeedFor = Duration.zero;
+          heavyPoopFor = Duration.zero;
+        }
+      }
+
+      // D7: timer murung juga hanya berjalan saat bangun.
+      if (!asleep) {
+        final lowBoth =
+            fullness <= GameRules.moodyThreshold &&
+            happiness <= GameRules.moodyThreshold;
+        lowBothFor = lowBoth ? lowBothFor + step : Duration.zero;
+        if (lowBothFor >= GameRules.moodyAfter) isMoody = true;
+      }
     }
     wasAsleep = asleep;
-
-    if (!asleep) {
-      // Kotoran yang jatuh tempo saat tidur baru muncul di menit bangun ini (K9).
-      final dueCount = poopDueAt.where((due) => !due.isAfter(t)).length;
-      if (dueCount > 0) {
-        poopDueAt.removeWhere((due) => !due.isAfter(t));
-        poop = (poop + dueCount).clamp(0, GameRules.maxPoop);
-        firstPoopAt ??= t;
-      }
-
-      fullness -= GameRules.fullnessDecayPerHour * hours * multiplier;
-      happiness -= GameRules.happinessDecayPerHour * hours * multiplier;
-    }
-
-    fullness = fullness
-        .clamp(GameRules.minMeter, GameRules.maxMeter)
-        .toDouble();
-
-    happiness = happiness
-        .clamp(GameRules.minMeter, GameRules.maxMeter)
-        .toDouble();
-
-    // D5: timer sakit hanya berjalan saat bangun. Saat tidur berhenti, tidak direset.
-    if (!asleep && !isSick) {
-      final zeroNeed =
-          fullness <= GameRules.minMeter || happiness <= GameRules.minMeter;
-      zeroNeedFor = zeroNeed ? zeroNeedFor + step : Duration.zero;
-      heavyPoopFor = poop >= GameRules.sickPoopThreshold
-          ? heavyPoopFor + step
-          : Duration.zero;
-
-      if (zeroNeedFor > GameRules.sickZeroNeedAfter ||
-          heavyPoopFor >= GameRules.sickPoopAfter) {
-        isSick = true;
-        // D6: reset agar pet tidak langsung sakit lagi setelah sembuh.
-        zeroNeedFor = Duration.zero;
-        heavyPoopFor = Duration.zero;
-      }
-    }
 
     t = t.add(step);
 
@@ -101,6 +124,12 @@ PetState simulate(
         t.difference(stageStartedAt) >= GameRules.eggDuration) {
       stage = LifeStage.baby;
       stageStartedAt = stageStartedAt.add(GameRules.eggDuration);
+    }
+
+    // Jam dinding, termasuk jam tidur.
+    if (!onVacation &&
+        t.difference(state.lastCareAt) >= GameRules.vacationAfter) {
+      onVacation = true;
     }
   }
 
@@ -118,5 +147,8 @@ PetState simulate(
     isSick: isSick,
     zeroNeedFor: zeroNeedFor,
     heavyPoopFor: heavyPoopFor,
+    isMoody: isMoody,
+    lowBothFor: lowBothFor,
+    onVacation: onVacation,
   );
 }
