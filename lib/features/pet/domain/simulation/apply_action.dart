@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import '../entities/care_action.dart';
+import '../entities/life_stage.dart';
 import '../entities/pet_state.dart';
 import '../rules/game_rules.dart';
 
@@ -21,6 +22,9 @@ ActionResult applyAction(PetState state, CareAction action, DateTime now) {
   // K10: pet sedang di rumah nenek; pemain harus Jemput dulu.
   if (state.onVacation) return reject();
 
+  final counted = state.stage.index >= LifeStage.child.index;
+  final style = state.careStyle;
+
   switch (action) {
     case CareAction.feed:
       if (state.fullness >= GameRules.maxMeter || state.isSick) {
@@ -36,6 +40,9 @@ ActionResult applyAction(PetState state, CareAction action, DateTime now) {
           poopDueAt: [...state.poopDueAt, now.add(GameRules.poopDelay)],
           isMoody: false,
           lowBothFor: Duration.zero,
+          careStyle: counted
+              ? style.copyWith(balancedActions: style.balancedActions + 1)
+              : style,
         ),
         needed: state.fullness < GameRules.neededMeterThreshold,
       );
@@ -46,6 +53,7 @@ ActionResult applyAction(PetState state, CareAction action, DateTime now) {
       }
       return accept(
         state.copyWith(
+          careStyle: counted ? style.copyWith(plays: style.plays + 1) : style,
           happiness: min(
             state.happiness + GameRules.playHappiness,
             GameRules.maxMeter,
@@ -78,6 +86,7 @@ ActionResult applyAction(PetState state, CareAction action, DateTime now) {
         weight: state.weight + GameRules.snackWeight,
         recentSnacks: recent,
         isSick: state.isSick || toMany,
+        careStyle: counted ? style.copyWith(snacks: style.snacks + 1) : style,
       );
 
       if (toMany) {
@@ -91,7 +100,20 @@ ActionResult applyAction(PetState state, CareAction action, DateTime now) {
 
     case CareAction.clean:
       if (state.poop == 0) return reject();
-      return accept(state.copyWith(poop: 0, firstPoopAt: null), needed: true);
+
+      final timely =
+          state.firstPoopAt != null &&
+          now.difference(state.firstPoopAt!) <= GameRules.timelyCleanWindow;
+      return accept(
+        state.copyWith(
+          poop: 0,
+          firstPoopAt: null,
+          careStyle: counted && timely
+              ? style.copyWith(timelyCleans: style.timelyCleans + 1)
+              : style,
+        ),
+        needed: true,
+      );
 
     case CareAction.medicine:
       if (!state.isSick) return reject();

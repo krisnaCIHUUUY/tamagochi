@@ -13,8 +13,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 7. Aturan sakit | ✅ Selesai, diverifikasi user | `50b3a72` |
 | 1 | 8. Murung, liburan, batas offline | ✅ Selesai, diverifikasi user | `c64189e` |
 | 1 | 9. `applyAction`: Makan, Camilan, Main | ✅ Selesai, diverifikasi user | `1f594a7` |
-| 1 | 10. Bersihkan, Obat, Lampu, kedekatan, `pickUp` | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 11–14. Domain murni | Belum | — |
+| 1 | 10. Bersihkan, Obat, Lampu, kedekatan, `pickUp` | ✅ Selesai, diverifikasi user | `021126b` |
+| 1 | 11. Tahap hidup + gaya perawatan | ✅ Selesai, menunggu verifikasi user | — |
+| 1 | 12–14. Domain murni | Belum | — |
 | 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
@@ -109,3 +110,12 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - Kedekatan (K7): `accept(next, needed:)` menambah `bondPerNeededAction`; dibutuhkan = makan saat kenyang < 50, main saat senang < 50, bersihkan, obat, lampu dimatikan saat tidur. Camilan +0.
 - `pickUp(state, now)`: hanya bila liburan (selain itu state asli); meter 50, kotoran dan jadwal kotoran dikosongkan, sehat, tidak murung, timer direset, `lastCareAt = now`.
 - Test `apply_action_care_test.dart` (16), termasuk `lastCareAt` untuk semua aksi. Verifikasi: `flutter test` 76/76 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 11 — Tahap hidup + penghitung gaya perawatan (2026-11-20, Mode belajar: implementasi ditulis user)
+
+- `simulate`: `switch (stage)` memberi durasi tahap (dewasa = `null`); bila tercapai, naik ke `LifeStage.values[index + 1]` dan `stageStartedAt` maju tepat sebesar durasi. Berjalan di luar blok liburan (K10).
+- `simulate`: `neglectMinutes` (variabel lokal, `copyWith` sekali di akhir) bertambah per menit penuh sejak tahap Anak bila liburan, atau bangun dengan kenyang/senang ≤ 20 (K6). Shortcut: langkah < 1 menit tidak dihitung.
+- `applyAction`: sejak tahap Anak, Main → `plays`, Camilan → `snacks`, Makan → `balancedActions` (K3), Bersihkan ≤ 1 jam sejak kotoran pertama → `timelyCleans` (K6).
+- Review: nama variabel diganti ke bahasa Inggris (`neglected`, `stageDuration`), import `life_stage` dibuat relatif, komentar shortcut ditambahkan.
+- Test `life_stage_test.dart` (13): batas tiap tahap ±1 menit, `stageStartedAt`, penghitung aksi, bersih tepat waktu, menit terlantar (RED 8/13 dulu, lalu GREEN).
+- Verifikasi: `flutter test` 89/89 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.

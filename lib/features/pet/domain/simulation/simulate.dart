@@ -45,6 +45,8 @@ PetState simulate(
 
   const oneMinute = Duration(minutes: 1);
 
+  var neglectMinutes = state.careStyle.neglectMinutes;
+
   while (t.isBefore(to)) {
     final remaining = to.difference(t);
     final step = remaining < oneMinute ? remaining : oneMinute;
@@ -118,12 +120,31 @@ PetState simulate(
     }
     wasAsleep = asleep;
 
+    // K6: menit terlantar dihitung sejak tahap Anak.
+    // shortcut: langkah < 1 menit tidak dihitung; ganti ke Duration bila selisihnya terasa.
+    if (stage.index >= LifeStage.child.index && step == oneMinute) {
+      final neglected =
+          onVacation ||
+          (!asleep &&
+              (fullness <= GameRules.neglectThreshold ||
+                  happiness <= GameRules.neglectThreshold));
+      if (neglected) neglectMinutes++;
+    }
+
     t = t.add(step);
 
-    if (stage == LifeStage.egg &&
-        t.difference(stageStartedAt) >= GameRules.eggDuration) {
-      stage = LifeStage.baby;
-      stageStartedAt = stageStartedAt.add(GameRules.eggDuration);
+    final stageDuration = switch (stage) {
+      LifeStage.egg => GameRules.eggDuration,
+      LifeStage.baby => GameRules.babyDuration,
+      LifeStage.child => GameRules.childDuration,
+      LifeStage.teen => GameRules.teenDuration,
+      LifeStage.adult => null,
+    };
+
+    if (stageDuration != null &&
+        t.difference(stageStartedAt) >= stageDuration) {
+      stage = LifeStage.values[stage.index + 1];
+      stageStartedAt = stageStartedAt.add(stageDuration);
     }
 
     // Jam dinding, termasuk jam tidur.
@@ -150,5 +171,6 @@ PetState simulate(
     isMoody: isMoody,
     lowBothFor: lowBothFor,
     onVacation: onVacation,
+    careStyle: state.careStyle.copyWith(neglectMinutes: neglectMinutes),
   );
 }
