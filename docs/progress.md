@@ -11,8 +11,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 5. `simulate` inti | ✅ Selesai, diverifikasi user | `b80c7ca` |
 | 1 | 6. Kotoran + lampu + transisi bangun | ✅ Selesai, diverifikasi user | `66caf1e` |
 | 1 | 7. Aturan sakit | ✅ Selesai, diverifikasi user | `50b3a72` |
-| 1 | 8. Murung, liburan, batas offline | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 9–14. Domain murni | Belum | — |
+| 1 | 8. Murung, liburan, batas offline | ✅ Selesai, diverifikasi user | `c64189e` |
+| 1 | 9. `applyAction`: Makan, Camilan, Main | ✅ Selesai, menunggu verifikasi user | — |
+| 1 | 10–14. Domain murni | Belum | — |
 | 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
@@ -86,3 +87,14 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - K1: bila `offline`, batas bawah meter = `min(nilai awal, 10)`; meter yang sudah < 10 tidak dinaikkan dan tidak diturunkan. Berlaku juga untuk penalti lampu.
 - Test `simulate_moody_vacation_test.dart` (11): murung 6 jam vs 5j59m, reset timer, D7, liburan 48 jam vs 47j59m, liburan membekukan, tahap tetap maju, batas offline 3 hari, meter < 10, online bisa 0, PRD P0-6 30 hari (RED 7/11 dulu, lalu GREEN).
 - Verifikasi: `flutter test` 46/46 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 9 — `applyAction`: Makan, Camilan, Main (2026-11-20, Mode belajar: implementasi ditulis user)
+
+- D8: signature ikut rencana, `ActionResult applyAction(...)` dengan `typedef ActionResult = ({PetState state, bool accepted})`; `resolveMood(state, now)` untuk Task 13. Blok "Fungsi murni" di `CLAUDE.md` disesuaikan.
+- `simulation/apply_action.dart`: fungsi lokal `reject()` (state asli, `accepted: false`) dan `accept(next)` (mengisi `lastCareAt = now`).
+- Makan: ditolak bila kenyang 100 atau sakit; kenyang +30 (maks 100), berat +5, jadwal kotoran `now + 3 jam`, murung dan `lowBothFor` direset.
+- Main: ditolak bila tidur, sakit, atau murung; senang +20 (maks 100), berat −5 (min 10).
+- Camilan: tidak pernah ditolak; senang +15, kenyang +10, berat +10; `recentSnacks` hanya menyimpan camilan dalam `GameRules.snackWindow` (1 jam, konstanta baru); > 5 → sakit dan timer sakit direset (D6).
+- Bersihkan, Obat, Lampu sementara selalu ditolak (Task 10).
+- Review: file dipindah dari `rules/` ke `simulation/`; `accept()` belum mengisi `lastCareAt` (ditangkap test) lalu diperbaiki; import dirapikan; `if` diberi kurung kurawal.
+- Test `apply_action_test.dart` (14). Verifikasi: `flutter test` 60/60 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.

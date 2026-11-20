@@ -26,6 +26,7 @@ abstract final class GameRules {
   static const int playWeight = -5;
   static const int maxSnacksPerHour = 5;
   static const int medicineDosesToCure = 2;
+  static const Duration snackWindow = Duration(hours: 1);
 
   // Kotoran (K9)
   static const Duration poopDelay = Duration(hours: 3);

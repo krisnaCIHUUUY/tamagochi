@@ -46,3 +46,10 @@ Saat pet menjadi sakit, `zeroNeedFor` dan `heavyPoopFor` kembali ke 0 dan tidak 
 ## D7 — Timer murung saat tidur (Task 8) · Diputuskan: hanya berjalan saat bangun
 
 `lowBothFor` ("kenyang dan senang ≤ 20 selama 6 jam") hanya bertambah di menit bangun dan berhenti tanpa reset saat tidur, sama seperti D5. **Alasan:** pet yang tidur dengan meter 20 tidak otomatis bangun dalam keadaan murung.
+
+## D8 — Signature `applyAction` dan `resolveMood` (Task 9) · Diputuskan: ikut rencana
+
+`CLAUDE.md` menulis `PetState applyAction(...)` dan `Mood resolveMood(PetState state)`, sedangkan rencana menulis versi lain. **Hasil:** ikut rencana, dan blok "Fungsi murni" di `CLAUDE.md` sudah disesuaikan.
+
+- `typedef ActionResult = ({PetState state, bool accepted}); ActionResult applyAction(state, action, now)`. **Alasan:** status "ditolak" eksplisit, sehingga bloc tinggal membaca `accepted` untuk memicu animasi geleng.
+- `Mood resolveMood(PetState state, DateTime now)`. **Alasan:** mood "tidur" bergantung pada jam, dan domain tidak boleh memanggil `DateTime.now()`.
