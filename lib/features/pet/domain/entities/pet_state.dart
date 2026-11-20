@@ -55,7 +55,9 @@ abstract class PetState with _$PetState {
       _$PetStateFromJson(json);
 }
 
-extension PetStateAge on PetState {
+extension PetStateTime on PetState {
   /// 1 hari nyata = 1 tahun pet.
   int ageYears(DateTime now) => now.difference(bornAt).inDays;
+
+  bool isAsleepAt(DateTime now) => sleepSchedule.isAsleepAt(now);
 }

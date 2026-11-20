@@ -215,8 +215,8 @@ return $default(_that.startHour,_that.endHour);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _SleepSchedule implements SleepSchedule {
-  const _SleepSchedule({this.startHour = GameRules.sleepStartHour, this.endHour = GameRules.sleepEndHour});
+class _SleepSchedule extends SleepSchedule {
+  const _SleepSchedule({this.startHour = GameRules.sleepStartHour, this.endHour = GameRules.sleepEndHour}): super._();
   factory _SleepSchedule.fromJson(Map<String, dynamic> json) => _$SleepScheduleFromJson(json);
 
 @override@JsonKey() final  int startHour;

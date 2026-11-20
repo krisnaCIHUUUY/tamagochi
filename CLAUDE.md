@@ -188,9 +188,10 @@ Ini inti proyek. Ikuti dengan ketat.
 ### Fungsi murni
 
 ```dart
-PetState simulate(PetState state, {required DateTime from, required DateTime to});
-PetState applyAction(PetState state, CareAction action, DateTime now);
-Mood resolveMood(PetState state);
+PetState simulate(PetState state, {required DateTime from, required DateTime to, bool offline = false});
+typedef ActionResult = ({PetState state, bool accepted});
+ActionResult applyAction(PetState state, CareAction action, DateTime now); // ditolak → accepted false, state identik
+Mood resolveMood(PetState state, DateTime now);
 ```
 
 - Input yang sama **selalu** menghasilkan output yang sama.
@@ -364,7 +365,7 @@ Semua nilai visual berasal dari token. **Jangan pernah menulis warna hex, ukuran
 ## Pet rendering rules
 
 - v1 menggambar pet dengan `CustomPainter` (P0-7). Ikuti proporsi dan mood di `design/TamaFlutter-design-system/components/Pet/README.md`.
-- Enam mood: senang, biasa, lapar, sakit, tidur, murung. Mood dihitung oleh `resolveMood(state)` di domain, bukan di widget.
+- Enam mood: senang, biasa, lapar, sakit, tidur, murung. Mood dihitung oleh `resolveMood(state, now)` di domain, bukan di widget.
 - Bentuk: Telur, Si Seimbang (juga Bayi/Anak/Remaja), Si Atletis, Si Gembul, Si Rapi, Si Mandiri.
 - Skala tahap dari `size-pet` (200): Bayi 0.5, Anak 0.7, Remaja 0.85, Dewasa 1.0.
 - Gambar PNG di `design/karakter_virtual_pet_terpisah/` adalah **acuan visual** untuk painter dan **tidak dibundel** ke APK. Menggantinya dengan PNG sebagai renderer adalah P2-1 (filenya baru disalin ke `assets/images/pet/` saat itu); tanya dulu sebelum melakukannya. Bila nanti dikerjakan, renderer dibuat di balik abstraksi `PetRenderer` supaya logika tidak berubah.

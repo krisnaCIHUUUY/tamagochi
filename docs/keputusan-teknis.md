@@ -34,3 +34,22 @@ Rencana menggabungkan enum ke `entities/enums.dart`, sedangkan `CLAUDE.md` menul
 ## D4 — Nilai awal `GameRules` (Task 3) · Diputuskan: pakai usulan K1–K12
 
 Semua usulan K1–K12 di tabel "Keputusan aturan" pada rencana dipakai apa adanya sebagai konstanta `GameRules`. Semua angka akan disetel ulang lewat playtest.
+
+## D5 — Timer sakit saat tidur (Task 7) · Diputuskan: hanya berjalan saat bangun
+
+`zeroNeedFor` ("kenyang/senang 0 > 60 menit") dan `heavyPoopFor` ("≥ 3 kotoran selama 2 jam") hanya bertambah di menit bangun. Saat tidur timer **berhenti**: tidak bertambah dan tidak direset. **Alasan:** konsisten dengan "saat tidur meter tidak turun", dan anak tidak bisa merawat di malam hari.
+
+## D6 — Timer setelah jadi sakit (Task 7) · Diputuskan: reset saat jadi sakit
+
+Saat pet menjadi sakit, `zeroNeedFor` dan `heavyPoopFor` kembali ke 0 dan tidak bertambah selama sakit. **Alasan:** Makan ditolak saat sakit. Tanpa reset, pet dengan kenyang 0 langsung sakit lagi semenit setelah sembuh diberi Obat, sehingga terjebak sakit terus. Setelah sembuh, pemain punya 60 menit untuk memberi makan.
+
+## D7 — Timer murung saat tidur (Task 8) · Diputuskan: hanya berjalan saat bangun
+
+`lowBothFor` ("kenyang dan senang ≤ 20 selama 6 jam") hanya bertambah di menit bangun dan berhenti tanpa reset saat tidur, sama seperti D5. **Alasan:** pet yang tidur dengan meter 20 tidak otomatis bangun dalam keadaan murung.
+
+## D8 — Signature `applyAction` dan `resolveMood` (Task 9) · Diputuskan: ikut rencana
+
+`CLAUDE.md` menulis `PetState applyAction(...)` dan `Mood resolveMood(PetState state)`, sedangkan rencana menulis versi lain. **Hasil:** ikut rencana, dan blok "Fungsi murni" di `CLAUDE.md` sudah disesuaikan.
+
+- `typedef ActionResult = ({PetState state, bool accepted}); ActionResult applyAction(state, action, now)`. **Alasan:** status "ditolak" eksplisit, sehingga bloc tinggal membaca `accepted` untuk memicu animasi geleng.
+- `Mood resolveMood(PetState state, DateTime now)`. **Alasan:** mood "tidur" bergantung pada jam, dan domain tidak boleh memanggil `DateTime.now()`.
