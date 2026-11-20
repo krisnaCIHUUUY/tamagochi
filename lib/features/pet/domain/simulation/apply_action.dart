@@ -9,8 +9,17 @@ typedef ActionResult = ({PetState state, bool accepted});
 ActionResult applyAction(PetState state, CareAction action, DateTime now) {
   ActionResult reject() => (state: state, accepted: false);
 
-  ActionResult accept(PetState next) =>
-      (state: next.copyWith(lastCareAt: now), accepted: true);
+  // K7: kedekatan +1 hanya untuk aksi yang memang dibutuhkan pet.
+  ActionResult accept(PetState next, {bool needed = false}) => (
+    state: next.copyWith(
+      lastCareAt: now,
+      bond: needed ? next.bond + GameRules.bondPerNeededAction : next.bond,
+    ),
+    accepted: true,
+  );
+
+  // K10: pet sedang di rumah nenek; pemain harus Jemput dulu.
+  if (state.onVacation) return reject();
 
   switch (action) {
     case CareAction.feed:
@@ -28,6 +37,7 @@ ActionResult applyAction(PetState state, CareAction action, DateTime now) {
           isMoody: false,
           lowBothFor: Duration.zero,
         ),
+        needed: state.fullness < GameRules.neededMeterThreshold,
       );
 
     case CareAction.play:
@@ -43,6 +53,7 @@ ActionResult applyAction(PetState state, CareAction action, DateTime now) {
 
           weight: max(state.weight + GameRules.playWeight, GameRules.minWeight),
         ),
+        needed: state.happiness < GameRules.neededMeterThreshold,
       );
 
     case CareAction.snack:
@@ -77,11 +88,50 @@ ActionResult applyAction(PetState state, CareAction action, DateTime now) {
       }
 
       return accept(next);
+
     case CareAction.clean:
-      return reject();
+      if (state.poop == 0) return reject();
+      return accept(state.copyWith(poop: 0, firstPoopAt: null), needed: true);
+
     case CareAction.medicine:
-      return reject();
+      if (!state.isSick) return reject();
+      final doses = state.medicineDoses + 1;
+      final cured = doses >= GameRules.medicineDosesToCure;
+      return accept(
+        state.copyWith(isSick: !cured, medicineDoses: cured ? 0 : doses),
+        needed: true,
+      );
+
     case CareAction.lights:
-      return reject();
+      // K12: tidak pernah ditolak. Mematikan lampu saat tidur = dibutuhkan.
+      final offAtNight = state.lightsOn && state.isAsleepAt(now);
+      return accept(
+        state.copyWith(
+          lightsOn: !state.lightsOn,
+          lightsOnAllSleep: state.lightsOnAllSleep && !offAtNight,
+        ),
+        needed: offAtNight,
+      );
   }
+}
+
+/// "Jemput Tama": pulang dari liburan dalam keadaan segar.
+PetState pickUp(PetState state, DateTime now) {
+  if (!state.onVacation) return state;
+  return state.copyWith(
+    fullness: GameRules.pickUpMeter,
+    happiness: GameRules.pickUpMeter,
+    poop: 0,
+    // Jadwal kotoran lama dibuang agar tidak muncul sekaligus setelah pulang.
+    poopDueAt: const [],
+    firstPoopAt: null,
+    isSick: false,
+    medicineDoses: 0,
+    isMoody: false,
+    onVacation: false,
+    zeroNeedFor: Duration.zero,
+    heavyPoopFor: Duration.zero,
+    lowBothFor: Duration.zero,
+    lastCareAt: now,
+  );
 }

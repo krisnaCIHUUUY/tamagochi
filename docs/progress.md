@@ -12,8 +12,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 6. Kotoran + lampu + transisi bangun | ✅ Selesai, diverifikasi user | `66caf1e` |
 | 1 | 7. Aturan sakit | ✅ Selesai, diverifikasi user | `50b3a72` |
 | 1 | 8. Murung, liburan, batas offline | ✅ Selesai, diverifikasi user | `c64189e` |
-| 1 | 9. `applyAction`: Makan, Camilan, Main | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 10–14. Domain murni | Belum | — |
+| 1 | 9. `applyAction`: Makan, Camilan, Main | ✅ Selesai, diverifikasi user | `1f594a7` |
+| 1 | 10. Bersihkan, Obat, Lampu, kedekatan, `pickUp` | ✅ Selesai, menunggu verifikasi user | — |
+| 1 | 11–14. Domain murni | Belum | — |
 | 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
@@ -98,3 +99,13 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - Bersihkan, Obat, Lampu sementara selalu ditolak (Task 10).
 - Review: file dipindah dari `rules/` ke `simulation/`; `accept()` belum mengisi `lastCareAt` (ditangkap test) lalu diperbaiki; import dirapikan; `if` diberi kurung kurawal.
 - Test `apply_action_test.dart` (14). Verifikasi: `flutter test` 60/60 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 10 — Bersihkan, Obat, Lampu, kedekatan, `pickUp` (2026-11-20, Mode belajar: ditulis Claude lalu dijelaskan)
+
+- K10: semua aksi ditolak saat `onVacation` (dicek sebelum `switch`).
+- Bersihkan: ditolak bila kotoran 0; kotoran 0 dan `firstPoopAt = null`.
+- Obat: ditolak bila tidak sakit; dosis ke-2 menyembuhkan dan mereset `medicineDoses`.
+- Lampu (K12): tidak pernah ditolak (kecuali liburan); mematikan lampu saat tidur mengosongkan `lightsOnAllSleep`.
+- Kedekatan (K7): `accept(next, needed:)` menambah `bondPerNeededAction`; dibutuhkan = makan saat kenyang < 50, main saat senang < 50, bersihkan, obat, lampu dimatikan saat tidur. Camilan +0.
+- `pickUp(state, now)`: hanya bila liburan (selain itu state asli); meter 50, kotoran dan jadwal kotoran dikosongkan, sehat, tidak murung, timer direset, `lastCareAt = now`.
+- Test `apply_action_care_test.dart` (16), termasuk `lastCareAt` untuk semua aksi. Verifikasi: `flutter test` 76/76 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
