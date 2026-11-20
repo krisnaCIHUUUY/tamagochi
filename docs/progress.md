@@ -8,8 +8,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 2. Clock + FakeClock | ✅ Selesai, diverifikasi user | `2a66921` |
 | 1 | 3. Enum, GameRules, SleepSchedule, CareStyle, PetState | ✅ Selesai, diverifikasi user | `6c7607b` |
 | 1 | 4. SleepSchedule.isAsleepAt | ✅ Selesai, diverifikasi user | `ae35c53` |
-| 1 | 5. `simulate` inti | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 6–14. Domain murni | Belum | — |
+| 1 | 5. `simulate` inti | ✅ Selesai, diverifikasi user | `b80c7ca` |
+| 1 | 6. Kotoran + lampu + transisi bangun | ✅ Selesai, menunggu verifikasi user | — |
+| 1 | 7–14. Domain murni | Belum | — |
 | 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
@@ -56,3 +57,12 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - Test `simulate_test.dart` (8): awake 2 jam, rentang tidur penuh, jam mundur (`same`), melewati jam tidur, bayi 2×, telur menetas, langkah parsial 90 detik, clamp 0 (RED dulu, lalu GREEN).
 - Review: early-return `onVacation` dihapus (bertentangan dengan K10, dikerjakan di Task 8), stub fungsi task lain dihapus, import diganti relatif.
 - Verifikasi: `flutter test` 22/22 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 6 — Kotoran, lampu, transisi bangun (2026-11-20, Mode belajar: ditulis Claude lalu dijelaskan)
+
+- Loop `simulate` menghitung `asleep` sekali per langkah dan mengingat `wasAsleep`; nilai awalnya diambil 1 µs sebelum `from` agar transisi tepat di `from` (mis. mulai 21.00) tetap terdeteksi.
+- Lampu (K12): saat baru tertidur `lightsOnAllSleep = lightsOn`; saat baru bangun senang −10 bila lampu menyala sepanjang tidur, lalu lampu dinyalakan dan flag direset.
+- Kotoran (K9): jadwal di `poopDueAt` yang sudah lewat diproses di menit bangun; jumlah dibatasi `maxPoop` (kelebihan dibuang), `firstPoopAt` diisi waktu kotoran pertama **muncul** (07.00 bila jatuh tempo saat tidur), tidak ditimpa bila sudah ada.
+- `poopDueAt` disalin (`[...state.poopDueAt]`) karena list freezed tidak bisa diubah.
+- Test `simulate_poop_lights_test.dart` (5): muncul 3 jam setelah makan, jatuh tempo saat tidur muncul saat bangun, batas 4, lampu menyala semalam −10, lampu mati tanpa penalti (RED dulu, lalu GREEN).
+- Verifikasi: `flutter test` 27/27 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
