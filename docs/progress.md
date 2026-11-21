@@ -15,8 +15,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 9. `applyAction`: Makan, Camilan, Main | ✅ Selesai, diverifikasi user | `1f594a7` |
 | 1 | 10. Bersihkan, Obat, Lampu, kedekatan, `pickUp` | ✅ Selesai, diverifikasi user | `021126b` |
 | 1 | 11. Tahap hidup + gaya perawatan | ✅ Selesai, diverifikasi user | `03b4c97` |
-| 1 | 12. Evolusi | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 13–14. Domain murni | Belum | — |
+| 1 | 12. Evolusi | ✅ Selesai, diverifikasi user | `c0b8b3b` |
+| 1 | 13. Mood + aksi yang dibutuhkan | ✅ Selesai, menunggu verifikasi user | — |
+| 1 | 14. Determinisme + benchmark (gerbang Fase 1) | Belum | — |
 | 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
@@ -129,3 +130,10 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - `simulate`: di akhir tahap Anak dan Remaja → `character = chooseCharacter(...)`, `careStyle` direset, `pendingReveal = true` (K5: evolusi kedua boleh mengganti karakter). Bayi → Anak bukan evolusi.
 - Test `evolution_test.dart` (16): 8 `chooseCharacter`, 3 evolusi di `simulate`, 5 skenario PRD P0-5 (telur → dewasa, simulasi per jam + rutinitas perawatan) untuk kelima karakter.
 - Verifikasi: `flutter test` 105/105 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 13 — Mood + aksi yang dibutuhkan (2026-11-21, Mode belajar: ditulis Claude lalu dijelaskan)
+
+- `simulation/mood_resolver.dart`: `resolveMood(state, now)` (D8) dengan prioritas K11 tidur > sakit > murung > lapar (kenyang ≤ 30) > senang (senang ≥ 70) > biasa; telur selalu biasa.
+- `neededActions(state, now)` (D11): aksi dibutuhkan = diterima `applyAction` **dan** menambah kedekatan (K7), urutan Obat > Lampu > Bersihkan > Makan > Main, maks. `GameRules.maxAttention` (2). `where` + `take` lazy, jadi berhenti setelah 2 ketemu.
+- Test `mood_resolver_test.dart` (14): urutan prioritas mood dan batas 30/70, telur, Obat lebih dulu dan Makan tidak disarankan saat sakit, batas 2, Main, Lampu saat tidur, sehat, liburan (RED dulu, lalu GREEN).
+- Verifikasi: `flutter test` 119/119 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.

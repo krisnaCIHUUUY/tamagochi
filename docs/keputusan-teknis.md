@@ -61,3 +61,7 @@ K3 menghitung setiap Makan sebagai aksi seimbang. Karena kotoran hanya muncul da
 ## D10 — Batas unggul evolusi (Task 12) · Diputuskan: ketat > 20% (PRD)
 
 PRD menulis "bila tidak ada yang unggul lebih dari 20%", sedangkan K4 menulis "≥ 1,2 × skor kedua". **Hasil:** ikut PRD. Skor tertinggi menang hanya bila `> 1,2 × skor kedua`, jadi 12 lawan 10 menghasilkan Si Seimbang.
+
+## D11 — Definisi `neededActions` (Task 13) · Diputuskan: diterima + menambah kedekatan
+
+Sebuah aksi "dibutuhkan" (titik panggilan) persis bila `applyAction` menerimanya **dan** kedekatan naik (definisi K7). Urutan prioritas: Obat > Lampu > Bersihkan > Makan > Main, diambil paling banyak `GameRules.maxAttention` (2). **Alasan:** aturan "dibutuhkan" tidak ditulis dua kali, dan aksi yang pasti ditolak (misalnya Makan saat sakit) tidak pernah disarankan.
