@@ -11,7 +11,6 @@ _CareStyle _$CareStyleFromJson(Map<String, dynamic> json) => _CareStyle(
   snacks: (json['snacks'] as num?)?.toInt() ?? 0,
   timelyCleans: (json['timelyCleans'] as num?)?.toInt() ?? 0,
   neglectMinutes: (json['neglectMinutes'] as num?)?.toInt() ?? 0,
-  balancedActions: (json['balancedActions'] as num?)?.toInt() ?? 0,
 );
 
 Map<String, dynamic> _$CareStyleToJson(_CareStyle instance) =>
@@ -20,5 +19,4 @@ Map<String, dynamic> _$CareStyleToJson(_CareStyle instance) =>
       'snacks': instance.snacks,
       'timelyCleans': instance.timelyCleans,
       'neglectMinutes': instance.neglectMinutes,
-      'balancedActions': instance.balancedActions,
     };

@@ -45,7 +45,6 @@ void main() {
         snacks: 2,
         timelyCleans: 3,
         neglectMinutes: 4,
-        balancedActions: 5,
       ),
       sleepSchedule: const SleepSchedule(startHour: 22, endHour: 6),
       pendingReveal: true,

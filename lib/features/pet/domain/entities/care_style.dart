@@ -4,6 +4,7 @@ part 'care_style.freezed.dart';
 part 'care_style.g.dart';
 
 /// Penghitung gaya perawatan yang tersembunyi; direset setiap evolusi.
+/// Tanpa "aksi seimbang": Si Seimbang = tidak ada yang unggul (D9).
 @freezed
 abstract class CareStyle with _$CareStyle {
   const factory CareStyle({
@@ -11,7 +12,6 @@ abstract class CareStyle with _$CareStyle {
     @Default(0) int snacks,
     @Default(0) int timelyCleans,
     @Default(0) int neglectMinutes,
-    @Default(0) int balancedActions,
   }) = _CareStyle;
 
   factory CareStyle.fromJson(Map<String, Object?> json) =>

@@ -40,9 +40,7 @@ ActionResult applyAction(PetState state, CareAction action, DateTime now) {
           poopDueAt: [...state.poopDueAt, now.add(GameRules.poopDelay)],
           isMoody: false,
           lowBothFor: Duration.zero,
-          careStyle: counted
-              ? style.copyWith(balancedActions: style.balancedActions + 1)
-              : style,
+          // D9: Makan tidak dihitung sebagai gaya perawatan.
         ),
         needed: state.fullness < GameRules.neededMeterThreshold,
       );

@@ -61,7 +61,7 @@ void main() {
       expect(result.careStyle.plays, 0);
     });
 
-    test('child: play, snack, feed count plays, snacks, balancedActions', () {
+    test('child: play and snack count; feed is not a style (D9)', () {
       var pet = awakePet(fullness: 50, happiness: 50);
       for (final action in [
         CareAction.play,
@@ -73,7 +73,8 @@ void main() {
 
       expect(pet.careStyle.plays, 1);
       expect(pet.careStyle.snacks, 1);
-      expect(pet.careStyle.balancedActions, 1);
+      expect(pet.careStyle.timelyCleans, 0);
+      expect(pet.careStyle.neglectMinutes, 0);
     });
 
     test('clean within 1h of first poop counts timelyCleans (K6)', () {

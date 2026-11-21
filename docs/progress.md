@@ -14,8 +14,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 8. Murung, liburan, batas offline | ✅ Selesai, diverifikasi user | `c64189e` |
 | 1 | 9. `applyAction`: Makan, Camilan, Main | ✅ Selesai, diverifikasi user | `1f594a7` |
 | 1 | 10. Bersihkan, Obat, Lampu, kedekatan, `pickUp` | ✅ Selesai, diverifikasi user | `021126b` |
-| 1 | 11. Tahap hidup + gaya perawatan | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 12–14. Domain murni | Belum | — |
+| 1 | 11. Tahap hidup + gaya perawatan | ✅ Selesai, diverifikasi user | `03b4c97` |
+| 1 | 12. Evolusi | ✅ Selesai, menunggu verifikasi user | — |
+| 1 | 13–14. Domain murni | Belum | — |
 | 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
@@ -119,3 +120,12 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - Review: nama variabel diganti ke bahasa Inggris (`neglected`, `stageDuration`), import `life_stage` dibuat relatif, komentar shortcut ditambahkan.
 - Test `life_stage_test.dart` (13): batas tiap tahap ±1 menit, `stageStartedAt`, penghitung aksi, bersih tepat waktu, menit terlantar (RED 8/13 dulu, lalu GREEN).
 - Verifikasi: `flutter test` 89/89 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 12 — Evolusi (2026-11-21, Mode belajar: ditulis Claude lalu dijelaskan)
+
+- D9: K3 membuat Si Rapi mustahil (`timelyCleans ≤ balancedActions`). `balancedActions` dihapus dari `CareStyle`, `applyAction`, dan test; skor tinggal 4 (main, camilan, bersih tepat waktu, menit terlantar ÷ 60). Si Seimbang = tidak ada yang unggul.
+- D10: unggul harus ketat > 20% (PRD), jadi 12 lawan 10 → Si Seimbang.
+- `simulation/evolution.dart`: `chooseCharacter(CareStyle)` mengurutkan 4 skor (record `(PetCharacter, int)`), menang bila `top > second × 1,2`.
+- `simulate`: di akhir tahap Anak dan Remaja → `character = chooseCharacter(...)`, `careStyle` direset, `pendingReveal = true` (K5: evolusi kedua boleh mengganti karakter). Bayi → Anak bukan evolusi.
+- Test `evolution_test.dart` (16): 8 `chooseCharacter`, 3 evolusi di `simulate`, 5 skenario PRD P0-5 (telur → dewasa, simulasi per jam + rutinitas perawatan) untuk kelima karakter.
+- Verifikasi: `flutter test` 105/105 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.

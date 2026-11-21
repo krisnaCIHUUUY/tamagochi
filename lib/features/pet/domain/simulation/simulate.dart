@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import '../entities/care_style.dart';
 import '../entities/life_stage.dart';
 import '../entities/pet_state.dart';
 import '../rules/game_rules.dart';
+import 'evolution.dart';
 
 PetState simulate(
   PetState state, {
@@ -45,7 +47,10 @@ PetState simulate(
 
   const oneMinute = Duration(minutes: 1);
 
-  var neglectMinutes = state.careStyle.neglectMinutes;
+  var careStyle = state.careStyle;
+  var neglectMinutes = careStyle.neglectMinutes;
+  var character = state.character;
+  var pendingReveal = state.pendingReveal;
 
   while (t.isBefore(to)) {
     final remaining = to.difference(t);
@@ -143,6 +148,15 @@ PetState simulate(
 
     if (stageDuration != null &&
         t.difference(stageStartedAt) >= stageDuration) {
+      // Evolusi di akhir tahap Anak (pertama) dan Remaja (kedua), K5.
+      if (stage == LifeStage.child || stage == LifeStage.teen) {
+        character = chooseCharacter(
+          careStyle.copyWith(neglectMinutes: neglectMinutes),
+        );
+        careStyle = const CareStyle();
+        neglectMinutes = 0;
+        pendingReveal = true;
+      }
       stage = LifeStage.values[stage.index + 1];
       stageStartedAt = stageStartedAt.add(stageDuration);
     }
@@ -171,6 +185,8 @@ PetState simulate(
     isMoody: isMoody,
     lowBothFor: lowBothFor,
     onVacation: onVacation,
-    careStyle: state.careStyle.copyWith(neglectMinutes: neglectMinutes),
+    careStyle: careStyle.copyWith(neglectMinutes: neglectMinutes),
+    character: character,
+    pendingReveal: pendingReveal,
   );
 }

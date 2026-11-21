@@ -53,3 +53,11 @@ Saat pet menjadi sakit, `zeroNeedFor` dan `heavyPoopFor` kembali ke 0 dan tidak 
 
 - `typedef ActionResult = ({PetState state, bool accepted}); ActionResult applyAction(state, action, now)`. **Alasan:** status "ditolak" eksplisit, sehingga bloc tinggal membaca `accepted` untuk memicu animasi geleng.
 - `Mood resolveMood(PetState state, DateTime now)`. **Alasan:** mood "tidur" bergantung pada jam, dan domain tidak boleh memanggil `DateTime.now()`.
+
+## D9 — "Aksi seimbang" (Task 12) · Diputuskan: Si Seimbang = tidak ada yang unggul
+
+K3 menghitung setiap Makan sebagai aksi seimbang. Karena kotoran hanya muncul dari Makan, `timelyCleans ≤ balancedActions`, sehingga Si Rapi mustahil tercapai (melanggar PRD P0-5). **Hasil:** `balancedActions` dihapus dari `CareStyle`, dari penghitung di `applyAction`, dan dari skor evolusi. Skor tinggal 4: main, camilan, bersih tepat waktu, dan menit terlantar ÷ 60. Si Seimbang muncul bila tidak ada skor yang unggul > 20%, sesuai tabel PRD "Tidak ada yang dominan". Ini menggantikan K3.
+
+## D10 — Batas unggul evolusi (Task 12) · Diputuskan: ketat > 20% (PRD)
+
+PRD menulis "bila tidak ada yang unggul lebih dari 20%", sedangkan K4 menulis "≥ 1,2 × skor kedua". **Hasil:** ikut PRD. Skor tertinggi menang hanya bila `> 1,2 × skor kedua`, jadi 12 lawan 10 menghasilkan Si Seimbang.
