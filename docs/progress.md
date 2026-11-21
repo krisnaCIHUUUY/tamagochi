@@ -16,8 +16,8 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 10. Bersihkan, Obat, Lampu, kedekatan, `pickUp` | ✅ Selesai, diverifikasi user | `021126b` |
 | 1 | 11. Tahap hidup + gaya perawatan | ✅ Selesai, diverifikasi user | `03b4c97` |
 | 1 | 12. Evolusi | ✅ Selesai, diverifikasi user | `c0b8b3b` |
-| 1 | 13. Mood + aksi yang dibutuhkan | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 14. Determinisme + benchmark (gerbang Fase 1) | Belum | — |
+| 1 | 13. Mood + aksi yang dibutuhkan | ✅ Selesai, diverifikasi user | `084057a` |
+| 1 | 14. Determinisme + benchmark (gerbang Fase 1) | ✅ Selesai, menunggu verifikasi user | — |
 | 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
@@ -137,3 +137,13 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - `neededActions(state, now)` (D11): aksi dibutuhkan = diterima `applyAction` **dan** menambah kedekatan (K7), urutan Obat > Lampu > Bersihkan > Makan > Main, maks. `GameRules.maxAttention` (2). `where` + `take` lazy, jadi berhenti setelah 2 ketemu.
 - Test `mood_resolver_test.dart` (14): urutan prioritas mood dan batas 30/70, telur, Obat lebih dulu dan Makan tidak disarankan saat sakit, batas 2, Main, Lampu saat tidur, sehat, liburan (RED dulu, lalu GREEN).
 - Verifikasi: `flutter test` 119/119 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 14 — Determinisme + benchmark, gerbang Fase 1 (2026-11-21, Mode belajar: ditulis Claude lalu dijelaskan)
+
+- Test `simulate_benchmark_test.dart`: `same input same output (7 days)` dan `30 days offline finishes in < 50 ms`.
+- Benchmark per menit gagal (~460 ms). Profiling: pembuatan `DateTime` lokal ~10 µs per kali (`.add`/`toLocal`), bukan aturan game.
+- D12: `simulate` ditulis ulang **per kejadian** (pilihan user). Segmen berakhir di kejadian terdekat: tidur/bangun, kotoran, tahap, liburan, meter mencapai 0/20, timer mencapai ambang. Helper privat `_nextSleepChange`, `_reachTime`, `_stageDuration`.
+- Semua 119 test lama lulus tanpa diubah; benchmark ≈ 36 ms (dingin) / 14 ms (panas).
+- Coverage `lib/features/pet/domain/` 100% (204/204 baris tulisan tangan; 289/289 termasuk generated).
+- `CLAUDE.md`: keputusan terbuka "per menit vs per kejadian" ditutup (D12), status fase diperbarui.
+- Verifikasi: `flutter test` 121/121 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.

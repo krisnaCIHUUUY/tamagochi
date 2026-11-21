@@ -29,8 +29,9 @@ Kalau file ini bertentangan dengan PRD, **PRD yang menang**. Kalau keduanya diam
 Perbarui bagian ini setiap kali gerbang fase lolos.
 
 - **Fondasi (Task 1 rencana):** selesai di `0ec5f48` (dependensi, `TamaApp` minimal, font dibundel).
-- **Fase sekarang:** Fase 1, Simulasi (belum dimulai)
-- **Fase berikutnya:** Fase 2, Dirawat
+- **Fase 1, Simulasi (Task 2–14 rencana):** gerbang lolos (domain coverage 100%, benchmark 30 hari < 50 ms), menunggu verifikasi.
+- **Fase sekarang:** Fase 2, Dirawat
+- **Fase berikutnya:** Fase 3, Tumbuh
 
 | Fase | Isi | Gerbang |
 | --- | --- | --- |
@@ -114,7 +115,7 @@ Kalau sesuatu tidak jelas atau ada cara yang lebih baik:
 Jangan memutuskan hal-hal ini diam-diam. Kalau pekerjaanmu bergantung padanya, tanya dulu:
 
 - Batas catch-up "tidak di bawah 10": sudah tepat, atau pet yang lama ditinggal perlu tampak lebih sedih? (blocking Fase 1)
-- Simulasi per menit atau per kejadian berikutnya? Usulan PRD: per menit dulu, ganti bila benchmark gagal. (blocking Fase 1)
+- ~~Simulasi per menit atau per kejadian berikutnya?~~ Diputuskan: **per kejadian** (D12), karena benchmark per menit gagal.
 - Pet digambar `CustomPainter` (rencana PRD v1) atau memakai PNG di `design/karakter_virtual_pet_terpisah/` (P2-1)?
 - Telur menetas 5 menit: terlalu lama untuk anak?
 - Laju kenyang −8/jam: terlalu cepat untuk anak yang sekolah 7 jam?

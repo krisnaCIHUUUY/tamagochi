@@ -65,3 +65,13 @@ PRD menulis "bila tidak ada yang unggul lebih dari 20%", sedangkan K4 menulis "�
 ## D11 — Definisi `neededActions` (Task 13) · Diputuskan: diterima + menambah kedekatan
 
 Sebuah aksi "dibutuhkan" (titik panggilan) persis bila `applyAction` menerimanya **dan** kedekatan naik (definisi K7). Urutan prioritas: Obat > Lampu > Bersihkan > Makan > Main, diambil paling banyak `GameRules.maxAttention` (2). **Alasan:** aturan "dibutuhkan" tidak ditulis dua kali, dan aksi yang pasti ditolak (misalnya Makan saat sakit) tidak pernah disarankan.
+
+## D12 — Simulasi per kejadian (Task 14) · Diputuskan: ganti dari per menit ke per kejadian
+
+Benchmark 30 hari per menit memakan ~460 ms (target < 50 ms). Penyebabnya, pembuatan `DateTime` lokal (`.add`, `toLocal`) sekitar 10 µs per kali di Windows, dikali 43.200 langkah. Opsi optimasi per menit (waktu sebagai `int` + cache jam tidur) ditolak. **Hasil:** sesuai rencana (K2), `simulate` diganti ke per kejadian. Ini menggantikan K2.
+
+- Waktu melompat ke kejadian terdekat: tidur/bangun, kotoran jatuh tempo, batas tahap, mulai liburan, meter mencapai 0 atau 20, dan timer mencapai ambang. Di antara dua kejadian meter turun lurus dan timer bertambah sepanjang segmen.
+- **Kejadian di awal segmen** (tidur/bangun, kotoran muncul) diproses saat segmen dimulai, jadi kejadian tepat di `to` diproses di panggilan berikutnya (sama seperti versi per menit). **Kejadian saat dicapai** (ambang timer, tahap, liburan) diproses begitu `t` mencapainya, termasuk tepat di `to`.
+- Dalam waktu kontinu, sakit karena meter 0 terjadi tepat saat timer mencapai 60 menit (`>=`). Versi per menit baru sakit di menit ke-61; test 59 vs 61 menit tetap sama.
+- Menit terlantar dihitung dari `Duration` lalu dibulatkan ke bawah per panggilan (shortcut, lihat komentar di kode).
+- Hasil: 30 hari offline ≈ 36 ms saat JIT dingin dan ≈ 14 ms saat panas (Windows, `flutter test`). Seluruh 119 test lama tetap lulus tanpa diubah.
