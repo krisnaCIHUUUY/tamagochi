@@ -41,7 +41,7 @@ PetState simulate(
   var lowBothFor = state.lowBothFor;
   var onVacation = state.onVacation;
   var careStyle = state.careStyle;
-  var neglected = Duration(minutes: careStyle.neglectMinutes);
+  var neglectedFor = careStyle.neglectedFor;
   var character = state.character;
   var pendingReveal = state.pendingReveal;
 
@@ -167,7 +167,7 @@ PetState simulate(
     if (sickTimersRun && zeroNeed) zeroNeedFor += span;
     if (sickTimersRun && heavyPoop) heavyPoopFor += span;
     if (careRuns && lowBoth) lowBothFor += span;
-    if (neglecting) neglected += span;
+    if (neglecting) neglectedFor += span;
     t = end;
 
     // 5. Kejadian saat dicapai.
@@ -187,10 +187,10 @@ PetState simulate(
       // Evolusi di akhir tahap Anak (pertama) dan Remaja (kedua), K5.
       if (stage == LifeStage.child || stage == LifeStage.teen) {
         character = chooseCharacter(
-          careStyle.copyWith(neglectMinutes: neglected.inMinutes),
+          careStyle.copyWith(neglectedFor: neglectedFor),
         );
         careStyle = const CareStyle();
-        neglected = Duration.zero;
+        neglectedFor = Duration.zero;
         pendingReveal = true;
       }
       stage = LifeStage.values[stage.index + 1];
@@ -221,9 +221,7 @@ PetState simulate(
     isMoody: isMoody,
     lowBothFor: lowBothFor,
     onVacation: onVacation,
-    // shortcut: sisa < 1 menit per panggilan dibuang (neglectMinutes int);
-    // ganti ke Duration bila banyak panggilan pendek membuatnya meleset.
-    careStyle: careStyle.copyWith(neglectMinutes: neglected.inMinutes),
+    careStyle: careStyle.copyWith(neglectedFor: neglectedFor),
     character: character,
     pendingReveal: pendingReveal,
   );

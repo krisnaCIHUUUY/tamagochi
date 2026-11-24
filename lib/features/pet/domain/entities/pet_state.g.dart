@@ -7,10 +7,16 @@ part of 'pet_state.dart';
 // **************************************************************************
 
 _PetState _$PetStateFromJson(Map<String, dynamic> json) => _PetState(
-  bornAt: DateTime.parse(json['bornAt'] as String),
-  lastUpdated: DateTime.parse(json['lastUpdated'] as String),
-  lastCareAt: DateTime.parse(json['lastCareAt'] as String),
-  stageStartedAt: DateTime.parse(json['stageStartedAt'] as String),
+  bornAt: const UtcDateTimeConverter().fromJson(json['bornAt'] as String),
+  lastUpdated: const UtcDateTimeConverter().fromJson(
+    json['lastUpdated'] as String,
+  ),
+  lastCareAt: const UtcDateTimeConverter().fromJson(
+    json['lastCareAt'] as String,
+  ),
+  stageStartedAt: const UtcDateTimeConverter().fromJson(
+    json['stageStartedAt'] as String,
+  ),
   stage:
       $enumDecodeNullable(_$LifeStageEnumMap, json['stage']) ?? LifeStage.egg,
   character: $enumDecodeNullable(_$PetCharacterEnumMap, json['character']),
@@ -20,12 +26,13 @@ _PetState _$PetStateFromJson(Map<String, dynamic> json) => _PetState(
   poop: (json['poop'] as num?)?.toInt() ?? 0,
   poopDueAt:
       (json['poopDueAt'] as List<dynamic>?)
-          ?.map((e) => DateTime.parse(e as String))
+          ?.map((e) => const UtcDateTimeConverter().fromJson(e as String))
           .toList() ??
       const <DateTime>[],
-  firstPoopAt: json['firstPoopAt'] == null
-      ? null
-      : DateTime.parse(json['firstPoopAt'] as String),
+  firstPoopAt: _$JsonConverterFromJson<String, DateTime>(
+    json['firstPoopAt'],
+    const UtcDateTimeConverter().fromJson,
+  ),
   isSick: json['isSick'] as bool? ?? false,
   medicineDoses: (json['medicineDoses'] as num?)?.toInt() ?? 0,
   weight: (json['weight'] as num?)?.toInt() ?? GameRules.startWeight,
@@ -45,7 +52,7 @@ _PetState _$PetStateFromJson(Map<String, dynamic> json) => _PetState(
       : Duration(microseconds: (json['lowBothFor'] as num).toInt()),
   recentSnacks:
       (json['recentSnacks'] as List<dynamic>?)
-          ?.map((e) => DateTime.parse(e as String))
+          ?.map((e) => const UtcDateTimeConverter().fromJson(e as String))
           .toList() ??
       const <DateTime>[],
   careStyle: json['careStyle'] == null
@@ -58,17 +65,24 @@ _PetState _$PetStateFromJson(Map<String, dynamic> json) => _PetState(
 );
 
 Map<String, dynamic> _$PetStateToJson(_PetState instance) => <String, dynamic>{
-  'bornAt': instance.bornAt.toIso8601String(),
-  'lastUpdated': instance.lastUpdated.toIso8601String(),
-  'lastCareAt': instance.lastCareAt.toIso8601String(),
-  'stageStartedAt': instance.stageStartedAt.toIso8601String(),
+  'bornAt': const UtcDateTimeConverter().toJson(instance.bornAt),
+  'lastUpdated': const UtcDateTimeConverter().toJson(instance.lastUpdated),
+  'lastCareAt': const UtcDateTimeConverter().toJson(instance.lastCareAt),
+  'stageStartedAt': const UtcDateTimeConverter().toJson(
+    instance.stageStartedAt,
+  ),
   'stage': _$LifeStageEnumMap[instance.stage]!,
   'character': _$PetCharacterEnumMap[instance.character],
   'fullness': instance.fullness,
   'happiness': instance.happiness,
   'poop': instance.poop,
-  'poopDueAt': instance.poopDueAt.map((e) => e.toIso8601String()).toList(),
-  'firstPoopAt': instance.firstPoopAt?.toIso8601String(),
+  'poopDueAt': instance.poopDueAt
+      .map(const UtcDateTimeConverter().toJson)
+      .toList(),
+  'firstPoopAt': _$JsonConverterToJson<String, DateTime>(
+    instance.firstPoopAt,
+    const UtcDateTimeConverter().toJson,
+  ),
   'isSick': instance.isSick,
   'medicineDoses': instance.medicineDoses,
   'weight': instance.weight,
@@ -81,7 +95,7 @@ Map<String, dynamic> _$PetStateToJson(_PetState instance) => <String, dynamic>{
   'heavyPoopFor': instance.heavyPoopFor.inMicroseconds,
   'lowBothFor': instance.lowBothFor.inMicroseconds,
   'recentSnacks': instance.recentSnacks
-      .map((e) => e.toIso8601String())
+      .map(const UtcDateTimeConverter().toJson)
       .toList(),
   'careStyle': instance.careStyle.toJson(),
   'sleepSchedule': instance.sleepSchedule.toJson(),
@@ -103,3 +117,13 @@ const _$PetCharacterEnumMap = {
   PetCharacter.mandiri: 'mandiri',
   PetCharacter.seimbang: 'seimbang',
 };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) => json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) => value == null ? null : toJson(value);

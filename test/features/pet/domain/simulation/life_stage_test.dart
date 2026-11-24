@@ -74,7 +74,7 @@ void main() {
       expect(pet.careStyle.plays, 1);
       expect(pet.careStyle.snacks, 1);
       expect(pet.careStyle.timelyCleans, 0);
-      expect(pet.careStyle.neglectMinutes, 0);
+      expect(pet.careStyle.neglectedFor, Duration.zero);
     });
 
     test('clean within 1h of first poop counts timelyCleans (K6)', () {
@@ -93,15 +93,26 @@ void main() {
     });
   });
 
-  group('neglectMinutes (K6)', () {
+  group('neglectedFor (K6)', () {
     int neglectAfter(PetState pet, DateTime from, Duration span) => simulate(
       pet.copyWith(lastUpdated: from),
       from: from,
       to: from.add(span),
-    ).careStyle.neglectMinutes;
+    ).careStyle.neglectedFor.inMinutes;
 
     test('counts awake minutes with a meter <= 20', () {
       expect(neglectAfter(awakePet(fullness: 20), now, hour * 2), 120);
+    });
+
+    test('D15: many short calls add up to the same time', () {
+      var pet = awakePet(fullness: 20);
+      var t = now;
+      for (var i = 0; i < 120; i++) {
+        final next = t.add(const Duration(seconds: 30));
+        pet = simulate(pet, from: t, to: next);
+        t = next;
+      }
+      expect(pet.careStyle.neglectedFor, hour);
     });
 
     test('does not count while both meters are above 20', () {

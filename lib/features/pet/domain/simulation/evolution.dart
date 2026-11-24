@@ -11,7 +11,7 @@ PetCharacter chooseCharacter(CareStyle style) {
     (PetCharacter.rapi, style.timelyCleans),
     (
       PetCharacter.mandiri,
-      style.neglectMinutes ~/ GameRules.neglectMinutesPerPoint,
+      style.neglectedFor.inMinutes ~/ GameRules.neglectMinutesPerPoint,
     ),
   ]..sort((a, b) => b.$2.compareTo(a.$2));
 

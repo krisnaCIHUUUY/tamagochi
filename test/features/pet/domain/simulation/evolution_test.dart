@@ -32,8 +32,8 @@ void main() {
       expect(chooseCharacter(style), PetCharacter.rapi);
     });
 
-    test('neglectMinutes 600 (= 10 points) vs 5 -> mandiri', () {
-      const style = CareStyle(plays: 5, neglectMinutes: 600);
+    test('neglected 600 minutes (= 10 points) vs 5 -> mandiri', () {
+      const style = CareStyle(plays: 5, neglectedFor: Duration(minutes: 600));
       expect(chooseCharacter(style), PetCharacter.mandiri);
     });
 
@@ -52,7 +52,7 @@ void main() {
     });
 
     test('neglect under 60 minutes is 0 points', () {
-      const style = CareStyle(neglectMinutes: 59);
+      const style = CareStyle(neglectedFor: Duration(minutes: 59));
       expect(chooseCharacter(style), PetCharacter.seimbang);
     });
   });

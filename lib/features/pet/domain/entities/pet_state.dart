@@ -5,6 +5,7 @@ import 'care_style.dart';
 import 'life_stage.dart';
 import 'pet_character.dart';
 import 'sleep_schedule.dart';
+import 'utc_date_time_converter.dart';
 
 part 'pet_state.freezed.dart';
 part 'pet_state.g.dart';
@@ -13,7 +14,7 @@ part 'pet_state.g.dart';
 abstract class PetState with _$PetState {
   // explicitToJson: objek bersarang (CareStyle, SleepSchedule) ikut jadi Map di toJson.
   // ignore: invalid_annotation_target
-  @JsonSerializable(explicitToJson: true)
+  @JsonSerializable(explicitToJson: true, converters: [UtcDateTimeConverter()])
   const factory PetState({
     required DateTime bornAt,
     required DateTime lastUpdated,

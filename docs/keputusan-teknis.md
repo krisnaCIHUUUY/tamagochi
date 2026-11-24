@@ -75,3 +75,15 @@ Benchmark 30 hari per menit memakan ~460 ms (target < 50 ms). Penyebabnya, pembu
 - Dalam waktu kontinu, sakit karena meter 0 terjadi tepat saat timer mencapai 60 menit (`>=`). Versi per menit baru sakit di menit ke-61; test 59 vs 61 menit tetap sama.
 - Menit terlantar dihitung dari `Duration` lalu dibulatkan ke bawah per panggilan (shortcut, lihat komentar di kode).
 - Hasil: 30 hari offline ≈ 36 ms saat JIT dingin dan ≈ 14 ms saat panas (Windows, `flutter test`). Seluruh 119 test lama tetap lulus tanpa diubah.
+
+## D13 — Format waktu di simpanan (Task 15) · Diputuskan: UTC
+
+Bawaan `json_serializable` menulis `DateTime` lokal tanpa zona, jadi pindah zona waktu (misalnya WIB ke WITA) menggeser waktu pet. **Hasil:** `UtcDateTimeConverter` menulis UTC (akhiran `Z`) dan membaca kembali sebagai waktu lokal. Jam tidur tetap dihitung dari jam lokal ponsel.
+
+## D14 — Simpanan berisi salah (Task 15) · Diputuskan: semua `FormatException`
+
+Rencana hanya mengatur versi lebih baru. **Hasil:** `decodeSave` melempar `FormatException` untuk semua isi yang tidak bisa dibaca: versi hilang/bukan angka/di luar 1–`currentSchemaVersion`, `pet` hilang, field hilang atau salah tipe, enum asing, tanggal rusak. Repository (Task 16) cukup menangkap satu jenis exception.
+
+## D15 — Waktu terlantar sebagai `Duration` (Task 15) · Diputuskan: ganti sekarang
+
+`neglectMinutes` (int) membuang sisa < 1 menit di setiap panggilan `simulate`, sehingga banyak panggilan pendek (ticker, aksi) membuatnya meleset. **Hasil:** diganti `CareStyle.neglectedFor` (`Duration`). Skor Si Mandiri tetap jam penuh: `neglectedFor.inMinutes ~/ neglectMinutesPerPoint`. Tanpa migrasi karena belum ada simpanan. Menggantikan poin shortcut di D12.

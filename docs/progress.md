@@ -17,8 +17,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 11. Tahap hidup + gaya perawatan | ✅ Selesai, diverifikasi user | `03b4c97` |
 | 1 | 12. Evolusi | ✅ Selesai, diverifikasi user | `c0b8b3b` |
 | 1 | 13. Mood + aksi yang dibutuhkan | ✅ Selesai, diverifikasi user | `084057a` |
-| 1 | 14. Determinisme + benchmark (gerbang Fase 1) | ✅ Selesai, menunggu verifikasi user | — |
-| 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
+| 1 | 14. Determinisme + benchmark (gerbang Fase 1) | ✅ Selesai, di-commit user | `d9cccd3` |
+| 2 | 15. Envelope simpanan + migrasi | ✅ Selesai, menunggu verifikasi user | — |
+| 2 | 16–19. Repository, Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
 
@@ -147,3 +148,12 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - Coverage `lib/features/pet/domain/` 100% (204/204 baris tulisan tangan; 289/289 termasuk generated).
 - `CLAUDE.md`: keputusan terbuka "per menit vs per kejadian" ditutup (D12), status fase diperbarui.
 - Verifikasi: `flutter test` 121/121 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 15 — Envelope simpanan + migrasi (2026-11-24)
+
+- `data/models/pet_save_file.dart`: `currentSchemaVersion = 1`, `encodeSave`, `decodeSave`, `migrate` (v1 = identitas, menerima seluruh envelope `{schemaVersion, pet}`).
+- D13: `UtcDateTimeConverter` di `domain/entities/`, dipasang di `PetState`; semua `DateTime` disimpan UTC dan dibaca kembali sebagai waktu lokal.
+- D14: versi tidak dikenal, `pet` hilang, field hilang/salah tipe, enum asing, atau tanggal rusak → `FormatException`.
+- D15: `CareStyle.neglectMinutes` (int) diganti `neglectedFor` (`Duration`); shortcut pembulatan di `simulate` dihapus.
+- Test baru (12): `pet_save_file_test.dart` (10), D13 di `pet_state_test.dart`, D15 (120 panggilan × 30 detik = 1 jam) di `life_stage_test.dart`. Test lama yang memakai `neglectMinutes` disesuaikan namanya.
+- Verifikasi: `flutter test` 133/133 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.

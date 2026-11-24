@@ -11,7 +11,7 @@ abstract class CareStyle with _$CareStyle {
     @Default(0) int plays,
     @Default(0) int snacks,
     @Default(0) int timelyCleans,
-    @Default(0) int neglectMinutes,
+    @Default(Duration.zero) Duration neglectedFor,
   }) = _CareStyle;
 
   factory CareStyle.fromJson(Map<String, Object?> json) =>
