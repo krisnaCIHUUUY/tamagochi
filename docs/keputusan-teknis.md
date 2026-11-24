@@ -53,3 +53,53 @@ Saat pet menjadi sakit, `zeroNeedFor` dan `heavyPoopFor` kembali ke 0 dan tidak 
 
 - `typedef ActionResult = ({PetState state, bool accepted}); ActionResult applyAction(state, action, now)`. **Alasan:** status "ditolak" eksplisit, sehingga bloc tinggal membaca `accepted` untuk memicu animasi geleng.
 - `Mood resolveMood(PetState state, DateTime now)`. **Alasan:** mood "tidur" bergantung pada jam, dan domain tidak boleh memanggil `DateTime.now()`.
+
+## D9 — "Aksi seimbang" (Task 12) · Diputuskan: Si Seimbang = tidak ada yang unggul
+
+K3 menghitung setiap Makan sebagai aksi seimbang. Karena kotoran hanya muncul dari Makan, `timelyCleans ≤ balancedActions`, sehingga Si Rapi mustahil tercapai (melanggar PRD P0-5). **Hasil:** `balancedActions` dihapus dari `CareStyle`, dari penghitung di `applyAction`, dan dari skor evolusi. Skor tinggal 4: main, camilan, bersih tepat waktu, dan menit terlantar ÷ 60. Si Seimbang muncul bila tidak ada skor yang unggul > 20%, sesuai tabel PRD "Tidak ada yang dominan". Ini menggantikan K3.
+
+## D10 — Batas unggul evolusi (Task 12) · Diputuskan: ketat > 20% (PRD)
+
+PRD menulis "bila tidak ada yang unggul lebih dari 20%", sedangkan K4 menulis "≥ 1,2 × skor kedua". **Hasil:** ikut PRD. Skor tertinggi menang hanya bila `> 1,2 × skor kedua`, jadi 12 lawan 10 menghasilkan Si Seimbang.
+
+## D11 — Definisi `neededActions` (Task 13) · Diputuskan: diterima + menambah kedekatan
+
+Sebuah aksi "dibutuhkan" (titik panggilan) persis bila `applyAction` menerimanya **dan** kedekatan naik (definisi K7). Urutan prioritas: Obat > Lampu > Bersihkan > Makan > Main, diambil paling banyak `GameRules.maxAttention` (2). **Alasan:** aturan "dibutuhkan" tidak ditulis dua kali, dan aksi yang pasti ditolak (misalnya Makan saat sakit) tidak pernah disarankan.
+
+## D12 — Simulasi per kejadian (Task 14) · Diputuskan: ganti dari per menit ke per kejadian
+
+Benchmark 30 hari per menit memakan ~460 ms (target < 50 ms). Penyebabnya, pembuatan `DateTime` lokal (`.add`, `toLocal`) sekitar 10 µs per kali di Windows, dikali 43.200 langkah. Opsi optimasi per menit (waktu sebagai `int` + cache jam tidur) ditolak. **Hasil:** sesuai rencana (K2), `simulate` diganti ke per kejadian. Ini menggantikan K2.
+
+- Waktu melompat ke kejadian terdekat: tidur/bangun, kotoran jatuh tempo, batas tahap, mulai liburan, meter mencapai 0 atau 20, dan timer mencapai ambang. Di antara dua kejadian meter turun lurus dan timer bertambah sepanjang segmen.
+- **Kejadian di awal segmen** (tidur/bangun, kotoran muncul) diproses saat segmen dimulai, jadi kejadian tepat di `to` diproses di panggilan berikutnya (sama seperti versi per menit). **Kejadian saat dicapai** (ambang timer, tahap, liburan) diproses begitu `t` mencapainya, termasuk tepat di `to`.
+- Dalam waktu kontinu, sakit karena meter 0 terjadi tepat saat timer mencapai 60 menit (`>=`). Versi per menit baru sakit di menit ke-61; test 59 vs 61 menit tetap sama.
+- Menit terlantar dihitung dari `Duration` lalu dibulatkan ke bawah per panggilan (shortcut, lihat komentar di kode).
+- Hasil: 30 hari offline ≈ 36 ms saat JIT dingin dan ≈ 14 ms saat panas (Windows, `flutter test`). Seluruh 119 test lama tetap lulus tanpa diubah.
+
+## D13 — Format waktu di simpanan (Task 15) · Diputuskan: UTC
+
+Bawaan `json_serializable` menulis `DateTime` lokal tanpa zona, jadi pindah zona waktu (misalnya WIB ke WITA) menggeser waktu pet. **Hasil:** `UtcDateTimeConverter` menulis UTC (akhiran `Z`) dan membaca kembali sebagai waktu lokal. Jam tidur tetap dihitung dari jam lokal ponsel.
+
+## D14 — Simpanan berisi salah (Task 15) · Diputuskan: semua `FormatException`
+
+Rencana hanya mengatur versi lebih baru. **Hasil:** `decodeSave` melempar `FormatException` untuk semua isi yang tidak bisa dibaca: versi hilang/bukan angka/di luar 1–`currentSchemaVersion`, `pet` hilang, field hilang atau salah tipe, enum asing, tanggal rusak. Repository (Task 16) cukup menangkap satu jenis exception.
+
+## D15 — Waktu terlantar sebagai `Duration` (Task 15) · Diputuskan: ganti sekarang
+
+`neglectMinutes` (int) membuang sisa < 1 menit di setiap panggilan `simulate`, sehingga banyak panggilan pendek (ticker, aksi) membuatnya meleset. **Hasil:** diganti `CareStyle.neglectedFor` (`Duration`). Skor Si Mandiri tetap jam penuh: `neglectedFor.inMinutes ~/ neglectMinutesPerPoint`. Tanpa migrasi karena belum ada simpanan. Menggantikan poin shortcut di D12.
+
+## D16 — `pet.json.corrupt` sudah ada (Task 16) · Diputuskan: simpan yang terbaru
+
+Rencana hanya menamai `pet.json.corrupt`. **Hasil:** bila file itu sudah ada, isinya ditimpa oleh kerusakan terbaru. Opsi nama bernomor (`.corrupt.1`, dst.) ditolak supaya file tidak menumpuk.
+
+## D17 — Pintu masuk mini game (P1-4, belum dikerjakan) · Diputuskan: balon setelah Main
+
+PRD tidak menyebut dari mana mini game dibuka. **Hasil:** tombol Main tetap satu ketukan dan efeknya tidak berubah. Setelah aksi Main diterima, pet menawarkan "Tebak arah, yuk?" lewat balon kata, dan mengetuk balon itu membuka mini game. **Alasan:** tidak perlu tombol ketujuh di `ActionBar`, dan mini game tetap pilihan. Contohnya ada di `design/v2/TamaFlutter-prototipe.figcraft`. Menang menambah senang +20, sama seperti Main (`GameRules.playHappiness`), di luar +20 dari aksi Main-nya sendiri.
+
+## D18 — Splash dan pilih nama · Diputuskan: tidak masuk PRD
+
+Keduanya ada di prototipe `design/v2/`, tetapi tidak ditambahkan ke PRD. **Hasil:** PRD tetap, dan keduanya tidak menjadi requirement.
+
+## D19 — Tombol Nasihati (P1-5, belum dikerjakan) · Diputuskan: masuk design system sebagai Button
+
+**Hasil:** Nasihati memakai Button secondary yang sudah ada, di dalam balon kata, dengan tinggi `size-button` (56). Panduannya di `components/Button/README.md`. **Alasan:** tampilan dan perilaku tekannya sama, jadi tidak perlu komponen atau token baru.

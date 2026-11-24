@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CareStyle {
 
- int get plays; int get snacks; int get timelyCleans; int get neglectMinutes; int get balancedActions;
+ int get plays; int get snacks; int get timelyCleans; Duration get neglectedFor;
 /// Create a copy of CareStyle
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,20 +30,20 @@ $CareStyleCopyWith<CareStyle> get copyWith => _$CareStyleCopyWithImpl<CareStyle>
 @override
 bool operator ==(Object other) {
   final _this = this as CareStyle;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CareStyle&&(identical(other.plays, _this.plays) || other.plays == _this.plays)&&(identical(other.snacks, _this.snacks) || other.snacks == _this.snacks)&&(identical(other.timelyCleans, _this.timelyCleans) || other.timelyCleans == _this.timelyCleans)&&(identical(other.neglectMinutes, _this.neglectMinutes) || other.neglectMinutes == _this.neglectMinutes)&&(identical(other.balancedActions, _this.balancedActions) || other.balancedActions == _this.balancedActions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CareStyle&&(identical(other.plays, _this.plays) || other.plays == _this.plays)&&(identical(other.snacks, _this.snacks) || other.snacks == _this.snacks)&&(identical(other.timelyCleans, _this.timelyCleans) || other.timelyCleans == _this.timelyCleans)&&(identical(other.neglectedFor, _this.neglectedFor) || other.neglectedFor == _this.neglectedFor));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as CareStyle;
-  return Object.hash(runtimeType,_this.plays,_this.snacks,_this.timelyCleans,_this.neglectMinutes,_this.balancedActions);
+  return Object.hash(runtimeType,_this.plays,_this.snacks,_this.timelyCleans,_this.neglectedFor);
 }
 
 @override
 String toString() {
   final _this = this as CareStyle;
-  return 'CareStyle(plays: ${_this.plays}, snacks: ${_this.snacks}, timelyCleans: ${_this.timelyCleans}, neglectMinutes: ${_this.neglectMinutes}, balancedActions: ${_this.balancedActions})';
+  return 'CareStyle(plays: ${_this.plays}, snacks: ${_this.snacks}, timelyCleans: ${_this.timelyCleans}, neglectedFor: ${_this.neglectedFor})';
 }
 
 
@@ -54,7 +54,7 @@ abstract mixin class $CareStyleCopyWith<$Res>  {
   factory $CareStyleCopyWith(CareStyle value, $Res Function(CareStyle) _then) = _$CareStyleCopyWithImpl;
 @useResult
 $Res call({
- int plays, int snacks, int timelyCleans, int neglectMinutes, int balancedActions
+ int plays, int snacks, int timelyCleans, Duration neglectedFor
 });
 
 
@@ -71,14 +71,13 @@ class _$CareStyleCopyWithImpl<$Res>
 
 /// Create a copy of CareStyle
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? plays = null,Object? snacks = null,Object? timelyCleans = null,Object? neglectMinutes = null,Object? balancedActions = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? plays = null,Object? snacks = null,Object? timelyCleans = null,Object? neglectedFor = null,}) {
   return _then(CareStyle(
 plays: null == plays ? _self.plays : plays // ignore: cast_nullable_to_non_nullable
 as int,snacks: null == snacks ? _self.snacks : snacks // ignore: cast_nullable_to_non_nullable
 as int,timelyCleans: null == timelyCleans ? _self.timelyCleans : timelyCleans // ignore: cast_nullable_to_non_nullable
-as int,neglectMinutes: null == neglectMinutes ? _self.neglectMinutes : neglectMinutes // ignore: cast_nullable_to_non_nullable
-as int,balancedActions: null == balancedActions ? _self.balancedActions : balancedActions // ignore: cast_nullable_to_non_nullable
-as int,
+as int,neglectedFor: null == neglectedFor ? _self.neglectedFor : neglectedFor // ignore: cast_nullable_to_non_nullable
+as Duration,
   ));
 }
 
@@ -163,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int plays,  int snacks,  int timelyCleans,  int neglectMinutes,  int balancedActions)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int plays,  int snacks,  int timelyCleans,  Duration neglectedFor)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CareStyle() when $default != null:
-return $default(_that.plays,_that.snacks,_that.timelyCleans,_that.neglectMinutes,_that.balancedActions);case _:
+return $default(_that.plays,_that.snacks,_that.timelyCleans,_that.neglectedFor);case _:
   return orElse();
 
 }
@@ -184,10 +183,10 @@ return $default(_that.plays,_that.snacks,_that.timelyCleans,_that.neglectMinutes
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int plays,  int snacks,  int timelyCleans,  int neglectMinutes,  int balancedActions)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int plays,  int snacks,  int timelyCleans,  Duration neglectedFor)  $default,) {final _that = this;
 switch (_that) {
 case _CareStyle():
-return $default(_that.plays,_that.snacks,_that.timelyCleans,_that.neglectMinutes,_that.balancedActions);case _:
+return $default(_that.plays,_that.snacks,_that.timelyCleans,_that.neglectedFor);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +203,10 @@ return $default(_that.plays,_that.snacks,_that.timelyCleans,_that.neglectMinutes
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int plays,  int snacks,  int timelyCleans,  int neglectMinutes,  int balancedActions)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int plays,  int snacks,  int timelyCleans,  Duration neglectedFor)?  $default,) {final _that = this;
 switch (_that) {
 case _CareStyle() when $default != null:
-return $default(_that.plays,_that.snacks,_that.timelyCleans,_that.neglectMinutes,_that.balancedActions);case _:
+return $default(_that.plays,_that.snacks,_that.timelyCleans,_that.neglectedFor);case _:
   return null;
 
 }
@@ -219,14 +218,13 @@ return $default(_that.plays,_that.snacks,_that.timelyCleans,_that.neglectMinutes
 @JsonSerializable()
 
 class _CareStyle implements CareStyle {
-  const _CareStyle({this.plays = 0, this.snacks = 0, this.timelyCleans = 0, this.neglectMinutes = 0, this.balancedActions = 0});
+  const _CareStyle({this.plays = 0, this.snacks = 0, this.timelyCleans = 0, this.neglectedFor = Duration.zero});
   factory _CareStyle.fromJson(Map<String, dynamic> json) => _$CareStyleFromJson(json);
 
 @override@JsonKey() final  int plays;
 @override@JsonKey() final  int snacks;
 @override@JsonKey() final  int timelyCleans;
-@override@JsonKey() final  int neglectMinutes;
-@override@JsonKey() final  int balancedActions;
+@override@JsonKey() final  Duration neglectedFor;
 
 /// Create a copy of CareStyle
 /// with the given fields replaced by the non-null parameter values.
@@ -241,18 +239,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _CareStyle&&(identical(other.plays, plays) || other.plays == plays)&&(identical(other.snacks, snacks) || other.snacks == snacks)&&(identical(other.timelyCleans, timelyCleans) || other.timelyCleans == timelyCleans)&&(identical(other.neglectMinutes, neglectMinutes) || other.neglectMinutes == neglectMinutes)&&(identical(other.balancedActions, balancedActions) || other.balancedActions == balancedActions));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _CareStyle&&(identical(other.plays, plays) || other.plays == plays)&&(identical(other.snacks, snacks) || other.snacks == snacks)&&(identical(other.timelyCleans, timelyCleans) || other.timelyCleans == timelyCleans)&&(identical(other.neglectedFor, neglectedFor) || other.neglectedFor == neglectedFor));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,plays,snacks,timelyCleans,neglectMinutes,balancedActions);
+    return Object.hash(runtimeType,plays,snacks,timelyCleans,neglectedFor);
 }
 
 @override
 String toString() {
-    return 'CareStyle(plays: $plays, snacks: $snacks, timelyCleans: $timelyCleans, neglectMinutes: $neglectMinutes, balancedActions: $balancedActions)';
+    return 'CareStyle(plays: $plays, snacks: $snacks, timelyCleans: $timelyCleans, neglectedFor: $neglectedFor)';
 }
 
 
@@ -263,7 +261,7 @@ abstract mixin class _$CareStyleCopyWith<$Res> implements $CareStyleCopyWith<$Re
   factory _$CareStyleCopyWith(_CareStyle value, $Res Function(_CareStyle) _then) = __$CareStyleCopyWithImpl;
 @override @useResult
 $Res call({
- int plays, int snacks, int timelyCleans, int neglectMinutes, int balancedActions
+ int plays, int snacks, int timelyCleans, Duration neglectedFor
 });
 
 
@@ -280,14 +278,13 @@ class __$CareStyleCopyWithImpl<$Res>
 
 /// Create a copy of CareStyle
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? plays = null,Object? snacks = null,Object? timelyCleans = null,Object? neglectMinutes = null,Object? balancedActions = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? plays = null,Object? snacks = null,Object? timelyCleans = null,Object? neglectedFor = null,}) {
   return _then(_CareStyle(
 plays: null == plays ? _self.plays : plays // ignore: cast_nullable_to_non_nullable
 as int,snacks: null == snacks ? _self.snacks : snacks // ignore: cast_nullable_to_non_nullable
 as int,timelyCleans: null == timelyCleans ? _self.timelyCleans : timelyCleans // ignore: cast_nullable_to_non_nullable
-as int,neglectMinutes: null == neglectMinutes ? _self.neglectMinutes : neglectMinutes // ignore: cast_nullable_to_non_nullable
-as int,balancedActions: null == balancedActions ? _self.balancedActions : balancedActions // ignore: cast_nullable_to_non_nullable
-as int,
+as int,neglectedFor: null == neglectedFor ? _self.neglectedFor : neglectedFor // ignore: cast_nullable_to_non_nullable
+as Duration,
   ));
 }
 

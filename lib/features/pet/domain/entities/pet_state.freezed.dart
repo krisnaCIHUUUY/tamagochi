@@ -256,7 +256,7 @@ return $default(_that.bornAt,_that.lastUpdated,_that.lastCareAt,_that.stageStart
 
 /// @nodoc
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, converters: [UtcDateTimeConverter()])
 class _PetState implements PetState {
   const _PetState({required this.bornAt, required this.lastUpdated, required this.lastCareAt, required this.stageStartedAt, this.stage = LifeStage.egg, this.character, this.fullness = GameRules.startFullness, this.happiness = GameRules.startHappiness, this.poop = 0,  List<DateTime> poopDueAt = const <DateTime>[], this.firstPoopAt, this.isSick = false, this.medicineDoses = 0, this.weight = GameRules.startWeight, this.bond = 0, this.lightsOn = true, this.lightsOnAllSleep = false, this.isMoody = false, this.onVacation = false, this.zeroNeedFor = Duration.zero, this.heavyPoopFor = Duration.zero, this.lowBothFor = Duration.zero,  List<DateTime> recentSnacks = const <DateTime>[], this.careStyle = const CareStyle(), this.sleepSchedule = const SleepSchedule(), this.pendingReveal = false}): _poopDueAt = poopDueAt,_recentSnacks = recentSnacks;
   factory _PetState.fromJson(Map<String, dynamic> json) => _$PetStateFromJson(json);

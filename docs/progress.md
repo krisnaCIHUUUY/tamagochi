@@ -14,9 +14,14 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 8. Murung, liburan, batas offline | ✅ Selesai, diverifikasi user | `c64189e` |
 | 1 | 9. `applyAction`: Makan, Camilan, Main | ✅ Selesai, diverifikasi user | `1f594a7` |
 | 1 | 10. Bersihkan, Obat, Lampu, kedekatan, `pickUp` | ✅ Selesai, diverifikasi user | `021126b` |
-| 1 | 11. Tahap hidup + gaya perawatan | ✅ Selesai, menunggu verifikasi user | — |
-| 1 | 12–14. Domain murni | Belum | — |
-| 2 | 15–19. Data, Bloc, lifecycle | Belum | — |
+| 1 | 11. Tahap hidup + gaya perawatan | ✅ Selesai, diverifikasi user | `03b4c97` |
+| 1 | 12. Evolusi | ✅ Selesai, diverifikasi user | `c0b8b3b` |
+| 1 | 13. Mood + aksi yang dibutuhkan | ✅ Selesai, diverifikasi user | `084057a` |
+| 1 | 14. Determinisme + benchmark (gerbang Fase 1) | ✅ Selesai, di-commit user | `d9cccd3` |
+| 2 | 15. Envelope simpanan + migrasi | ✅ Selesai, diverifikasi user | `80917c6` |
+| 2 | 16. `PetRepositoryImpl` (tulis atomik) | ✅ Selesai, diverifikasi user | `322d86e` |
+| 2 | 17. `PetViewState` + `PetEvent` | ✅ Selesai, menunggu verifikasi user | — |
+| 2 | 18–19. Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
 
@@ -119,3 +124,54 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - Review: nama variabel diganti ke bahasa Inggris (`neglected`, `stageDuration`), import `life_stage` dibuat relatif, komentar shortcut ditambahkan.
 - Test `life_stage_test.dart` (13): batas tiap tahap ±1 menit, `stageStartedAt`, penghitung aksi, bersih tepat waktu, menit terlantar (RED 8/13 dulu, lalu GREEN).
 - Verifikasi: `flutter test` 89/89 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 12 — Evolusi (2026-11-21, Mode belajar: ditulis Claude lalu dijelaskan)
+
+- D9: K3 membuat Si Rapi mustahil (`timelyCleans ≤ balancedActions`). `balancedActions` dihapus dari `CareStyle`, `applyAction`, dan test; skor tinggal 4 (main, camilan, bersih tepat waktu, menit terlantar ÷ 60). Si Seimbang = tidak ada yang unggul.
+- D10: unggul harus ketat > 20% (PRD), jadi 12 lawan 10 → Si Seimbang.
+- `simulation/evolution.dart`: `chooseCharacter(CareStyle)` mengurutkan 4 skor (record `(PetCharacter, int)`), menang bila `top > second × 1,2`.
+- `simulate`: di akhir tahap Anak dan Remaja → `character = chooseCharacter(...)`, `careStyle` direset, `pendingReveal = true` (K5: evolusi kedua boleh mengganti karakter). Bayi → Anak bukan evolusi.
+- Test `evolution_test.dart` (16): 8 `chooseCharacter`, 3 evolusi di `simulate`, 5 skenario PRD P0-5 (telur → dewasa, simulasi per jam + rutinitas perawatan) untuk kelima karakter.
+- Verifikasi: `flutter test` 105/105 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 13 — Mood + aksi yang dibutuhkan (2026-11-21, Mode belajar: ditulis Claude lalu dijelaskan)
+
+- `simulation/mood_resolver.dart`: `resolveMood(state, now)` (D8) dengan prioritas K11 tidur > sakit > murung > lapar (kenyang ≤ 30) > senang (senang ≥ 70) > biasa; telur selalu biasa.
+- `neededActions(state, now)` (D11): aksi dibutuhkan = diterima `applyAction` **dan** menambah kedekatan (K7), urutan Obat > Lampu > Bersihkan > Makan > Main, maks. `GameRules.maxAttention` (2). `where` + `take` lazy, jadi berhenti setelah 2 ketemu.
+- Test `mood_resolver_test.dart` (14): urutan prioritas mood dan batas 30/70, telur, Obat lebih dulu dan Makan tidak disarankan saat sakit, batas 2, Main, Lampu saat tidur, sehat, liburan (RED dulu, lalu GREEN).
+- Verifikasi: `flutter test` 119/119 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 14 — Determinisme + benchmark, gerbang Fase 1 (2026-11-21, Mode belajar: ditulis Claude lalu dijelaskan)
+
+- Test `simulate_benchmark_test.dart`: `same input same output (7 days)` dan `30 days offline finishes in < 50 ms`.
+- Benchmark per menit gagal (~460 ms). Profiling: pembuatan `DateTime` lokal ~10 µs per kali (`.add`/`toLocal`), bukan aturan game.
+- D12: `simulate` ditulis ulang **per kejadian** (pilihan user). Segmen berakhir di kejadian terdekat: tidur/bangun, kotoran, tahap, liburan, meter mencapai 0/20, timer mencapai ambang. Helper privat `_nextSleepChange`, `_reachTime`, `_stageDuration`.
+- Semua 119 test lama lulus tanpa diubah; benchmark ≈ 36 ms (dingin) / 14 ms (panas).
+- Coverage `lib/features/pet/domain/` 100% (204/204 baris tulisan tangan; 289/289 termasuk generated).
+- `CLAUDE.md`: keputusan terbuka "per menit vs per kejadian" ditutup (D12), status fase diperbarui.
+- Verifikasi: `flutter test` 121/121 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 15 — Envelope simpanan + migrasi (2026-11-24)
+
+- `data/models/pet_save_file.dart`: `currentSchemaVersion = 1`, `encodeSave`, `decodeSave`, `migrate` (v1 = identitas, menerima seluruh envelope `{schemaVersion, pet}`).
+- D13: `UtcDateTimeConverter` di `domain/entities/`, dipasang di `PetState`; semua `DateTime` disimpan UTC dan dibaca kembali sebagai waktu lokal.
+- D14: versi tidak dikenal, `pet` hilang, field hilang/salah tipe, enum asing, atau tanggal rusak → `FormatException`.
+- D15: `CareStyle.neglectMinutes` (int) diganti `neglectedFor` (`Duration`); shortcut pembulatan di `simulate` dihapus.
+- Test baru (12): `pet_save_file_test.dart` (10), D13 di `pet_state_test.dart`, D15 (120 panggilan × 30 detik = 1 jam) di `life_stage_test.dart`. Test lama yang memakai `neglectMinutes` disesuaikan namanya.
+- Verifikasi: `flutter test` 133/133 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 16 — `PetRepositoryImpl`, tulis atomik (2026-11-24)
+
+- `domain/repositories/pet_repository.dart`: `abstract class PetRepository` (`load`, `save`).
+- `data/repositories/pet_repository_impl.dart`: `save` menulis `pet.json.tmp` (`flush: true`) lalu `rename` ke `pet.json`; semua `save` antre lewat `_lastSave`, dan save yang gagal tidak memutus antrean.
+- `load`: tidak ada file → `null`; isi rusak (JSON terpotong, kosong, bukan objek, UTF-8 rusak, versi baru) → di-rename ke `pet.json.corrupt` (D16) lalu `null`. Error I/O lain diteruskan ke pemanggil.
+- Test `pet_repository_impl_test.dart` (13). Cek mutasi: tanpa antrean dan tanpa `catchError` test gagal.
+- Verifikasi: `flutter test` 146/146 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 17 — `PetViewState` + `PetEvent` (2026-11-24)
+
+- `presentation/bloc/pet_event.dart`: `sealed class PetEvent` dengan 7 event `final`, semua `const` (`PetStarted`, `PetTicked`, `PetResumed`, `PetPaused`, `CareActionPressed`, `PickUpPressed`, `RevealSeen`).
+- `presentation/bloc/pet_view_state.dart`: freezed `PetViewState` (`pet`, `mood`, `needed`, `reaction`) dan `PetReaction` (`action`, `accepted`, `seq`), tanpa JSON.
+- Event tanpa `==` (sesuai rencana, bukan freezed): di test pakai `const` atau matcher `isA` / `any(that: ...)`.
+- Tanpa test sendiri (sesuai rencana); diuji lewat Task 18.
+- Verifikasi: `build_runner` OK, `flutter test` 146/146 lulus, `flutter analyze` bersih.

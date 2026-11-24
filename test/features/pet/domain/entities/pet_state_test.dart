@@ -44,14 +44,23 @@ void main() {
         plays: 1,
         snacks: 2,
         timelyCleans: 3,
-        neglectMinutes: 4,
-        balancedActions: 5,
+        neglectedFor: Duration(seconds: 270),
       ),
       sleepSchedule: const SleepSchedule(startHour: 22, endHour: 6),
       pendingReveal: true,
     );
 
     expect(PetState.fromJson(full.toJson()), full);
+  });
+
+  test('D13: dates are saved in UTC and read back as local', () {
+    final json = awakePet().copyWith(poopDueAt: [t], firstPoopAt: t).toJson();
+    final utc = t.toUtc().toIso8601String();
+
+    expect(json['lastUpdated'], utc);
+    expect(json['poopDueAt'], [utc]);
+    expect(json['firstPoopAt'], utc);
+    expect(PetState.fromJson(json).lastUpdated.isUtc, false);
   });
 
   test('ageYears counts whole real days since birth', () {
