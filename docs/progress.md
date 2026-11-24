@@ -18,8 +18,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 12. Evolusi | ✅ Selesai, diverifikasi user | `c0b8b3b` |
 | 1 | 13. Mood + aksi yang dibutuhkan | ✅ Selesai, diverifikasi user | `084057a` |
 | 1 | 14. Determinisme + benchmark (gerbang Fase 1) | ✅ Selesai, di-commit user | `d9cccd3` |
-| 2 | 15. Envelope simpanan + migrasi | ✅ Selesai, menunggu verifikasi user | — |
-| 2 | 16–19. Repository, Bloc, lifecycle | Belum | — |
+| 2 | 15. Envelope simpanan + migrasi | ✅ Selesai, diverifikasi user | `80917c6` |
+| 2 | 16. `PetRepositoryImpl` (tulis atomik) | ✅ Selesai, menunggu verifikasi user | — |
+| 2 | 17–19. Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
 
@@ -157,3 +158,11 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - D15: `CareStyle.neglectMinutes` (int) diganti `neglectedFor` (`Duration`); shortcut pembulatan di `simulate` dihapus.
 - Test baru (12): `pet_save_file_test.dart` (10), D13 di `pet_state_test.dart`, D15 (120 panggilan × 30 detik = 1 jam) di `life_stage_test.dart`. Test lama yang memakai `neglectMinutes` disesuaikan namanya.
 - Verifikasi: `flutter test` 133/133 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 16 — `PetRepositoryImpl`, tulis atomik (2026-11-24)
+
+- `domain/repositories/pet_repository.dart`: `abstract class PetRepository` (`load`, `save`).
+- `data/repositories/pet_repository_impl.dart`: `save` menulis `pet.json.tmp` (`flush: true`) lalu `rename` ke `pet.json`; semua `save` antre lewat `_lastSave`, dan save yang gagal tidak memutus antrean.
+- `load`: tidak ada file → `null`; isi rusak (JSON terpotong, kosong, bukan objek, UTF-8 rusak, versi baru) → di-rename ke `pet.json.corrupt` (D16) lalu `null`. Error I/O lain diteruskan ke pemanggil.
+- Test `pet_repository_impl_test.dart` (13). Cek mutasi: tanpa antrean dan tanpa `catchError` test gagal.
+- Verifikasi: `flutter test` 146/146 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.

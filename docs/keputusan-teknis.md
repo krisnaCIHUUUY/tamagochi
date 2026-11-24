@@ -87,3 +87,7 @@ Rencana hanya mengatur versi lebih baru. **Hasil:** `decodeSave` melempar `Forma
 ## D15 — Waktu terlantar sebagai `Duration` (Task 15) · Diputuskan: ganti sekarang
 
 `neglectMinutes` (int) membuang sisa < 1 menit di setiap panggilan `simulate`, sehingga banyak panggilan pendek (ticker, aksi) membuatnya meleset. **Hasil:** diganti `CareStyle.neglectedFor` (`Duration`). Skor Si Mandiri tetap jam penuh: `neglectedFor.inMinutes ~/ neglectMinutesPerPoint`. Tanpa migrasi karena belum ada simpanan. Menggantikan poin shortcut di D12.
+
+## D16 — `pet.json.corrupt` sudah ada (Task 16) · Diputuskan: simpan yang terbaru
+
+Rencana hanya menamai `pet.json.corrupt`. **Hasil:** bila file itu sudah ada, isinya ditimpa oleh kerusakan terbaru. Opsi nama bernomor (`.corrupt.1`, dst.) ditolak supaya file tidak menumpuk.
