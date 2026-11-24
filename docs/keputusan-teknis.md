@@ -91,3 +91,15 @@ Rencana hanya mengatur versi lebih baru. **Hasil:** `decodeSave` melempar `Forma
 ## D16 — `pet.json.corrupt` sudah ada (Task 16) · Diputuskan: simpan yang terbaru
 
 Rencana hanya menamai `pet.json.corrupt`. **Hasil:** bila file itu sudah ada, isinya ditimpa oleh kerusakan terbaru. Opsi nama bernomor (`.corrupt.1`, dst.) ditolak supaya file tidak menumpuk.
+
+## D17 — Pintu masuk mini game (P1-4, belum dikerjakan) · Diputuskan: balon setelah Main
+
+PRD tidak menyebut dari mana mini game dibuka. **Hasil:** tombol Main tetap satu ketukan dan efeknya tidak berubah. Setelah aksi Main diterima, pet menawarkan "Tebak arah, yuk?" lewat balon kata, dan mengetuk balon itu membuka mini game. **Alasan:** tidak perlu tombol ketujuh di `ActionBar`, dan mini game tetap pilihan. Contohnya ada di `design/v2/TamaFlutter-prototipe.figcraft`. Menang menambah senang +20, sama seperti Main (`GameRules.playHappiness`), di luar +20 dari aksi Main-nya sendiri.
+
+## D18 — Splash dan pilih nama · Diputuskan: tidak masuk PRD
+
+Keduanya ada di prototipe `design/v2/`, tetapi tidak ditambahkan ke PRD. **Hasil:** PRD tetap, dan keduanya tidak menjadi requirement.
+
+## D19 — Tombol Nasihati (P1-5, belum dikerjakan) · Diputuskan: masuk design system sebagai Button
+
+**Hasil:** Nasihati memakai Button secondary yang sudah ada, di dalam balon kata, dengan tinggi `size-button` (56). Panduannya di `components/Button/README.md`. **Alasan:** tampilan dan perilaku tekannya sama, jadi tidak perlu komponen atau token baru.

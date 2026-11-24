@@ -19,8 +19,9 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 | 1 | 13. Mood + aksi yang dibutuhkan | ✅ Selesai, diverifikasi user | `084057a` |
 | 1 | 14. Determinisme + benchmark (gerbang Fase 1) | ✅ Selesai, di-commit user | `d9cccd3` |
 | 2 | 15. Envelope simpanan + migrasi | ✅ Selesai, diverifikasi user | `80917c6` |
-| 2 | 16. `PetRepositoryImpl` (tulis atomik) | ✅ Selesai, menunggu verifikasi user | — |
-| 2 | 17–19. Bloc, lifecycle | Belum | — |
+| 2 | 16. `PetRepositoryImpl` (tulis atomik) | ✅ Selesai, diverifikasi user | `322d86e` |
+| 2 | 17. `PetViewState` + `PetEvent` | ✅ Selesai, menunggu verifikasi user | — |
+| 2 | 18–19. Bloc, lifecycle | Belum | — |
 | 3 | 20–25. UI statis, painter, debug clock | Belum | — |
 | 4 | 26–29. Animasi, evolusi, verifikasi HP | Belum | — |
 
@@ -166,3 +167,11 @@ Rencana: `docs/superpowers/plans/2026-11-19-tamaflutter-v1.md` · Keputusan: `do
 - `load`: tidak ada file → `null`; isi rusak (JSON terpotong, kosong, bukan objek, UTF-8 rusak, versi baru) → di-rename ke `pet.json.corrupt` (D16) lalu `null`. Error I/O lain diteruskan ke pemanggil.
 - Test `pet_repository_impl_test.dart` (13). Cek mutasi: tanpa antrean dan tanpa `catchError` test gagal.
 - Verifikasi: `flutter test` 146/146 lulus, `flutter analyze` bersih, domain tanpa `package:flutter`/`dart:io`.
+
+## Task 17 — `PetViewState` + `PetEvent` (2026-11-24)
+
+- `presentation/bloc/pet_event.dart`: `sealed class PetEvent` dengan 7 event `final`, semua `const` (`PetStarted`, `PetTicked`, `PetResumed`, `PetPaused`, `CareActionPressed`, `PickUpPressed`, `RevealSeen`).
+- `presentation/bloc/pet_view_state.dart`: freezed `PetViewState` (`pet`, `mood`, `needed`, `reaction`) dan `PetReaction` (`action`, `accepted`, `seq`), tanpa JSON.
+- Event tanpa `==` (sesuai rencana, bukan freezed): di test pakai `const` atau matcher `isA` / `any(that: ...)`.
+- Tanpa test sendiri (sesuai rencana); diuji lewat Task 18.
+- Verifikasi: `build_runner` OK, `flutter test` 146/146 lulus, `flutter analyze` bersih.
